@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 public class GameController extends JComponent implements KeyListener {
     private static GameBoard gameBoard;
     private final int FRAMES_PER_SECOND = 2;
-    private final long FRAME_DURATION = 1000/FRAMES_PER_SECOND;
+    private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
     private boolean quitNextUpdate = false;
     private long gameStartTime;
     private Player controlledPlayer;

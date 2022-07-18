@@ -11,9 +11,12 @@ public class Window {
 
         GameController component = new GameController();
         frame.add(component);
+        frame.addKeyListener(component);
 
         frame.setVisible(true);
 
         component.start();
+        frame.setVisible(false);
+        frame.dispose();
     }
 }

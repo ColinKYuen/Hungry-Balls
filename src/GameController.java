@@ -11,6 +11,7 @@ public class GameController extends JComponent implements KeyListener {
     private final int FRAMES_PER_SECOND = 2;
     private final long FRAME_DURATION = 1000/FRAMES_PER_SECOND;
     private boolean quitNextUpdate = false;
+    private long gameStartTime;
 
     private void quit() {
         quitNextUpdate = true;
@@ -26,24 +27,36 @@ public class GameController extends JComponent implements KeyListener {
         // Etc
     }
 
+    private long getElaspedTime()
+    {
+        return System.currentTimeMillis() - gameStartTime;
+    }
+
     public void start(){
-        long gameStartTime = System.currentTimeMillis();
+        gameStartTime = System.currentTimeMillis();
         repaint();
 
         while(!quitNextUpdate)
         {
-            long elapsedTime = System.currentTimeMillis() - gameStartTime;
+            long elapsedTime = getElaspedTime();
             updateGame();
             repaint();
             elapsedTime += FRAME_DURATION;
-            long sleepDuration = elapsedTime - System.currentTimeMillis();
-            try
+            long sleepDuration = elapsedTime - getElaspedTime();
+            if (sleepDuration>=0)
             {
-                Thread.sleep(sleepDuration);
+                try
+                {
+                    Thread.sleep(sleepDuration);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
             }
-            catch(InterruptedException ex)
+            else
             {
-                Thread.currentThread().interrupt();
+                System.out.println("Update and repaint took too long");
             }
         }
     }

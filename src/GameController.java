@@ -4,7 +4,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import static java.lang.System.currentTimeMillis;
 
 public class GameController extends JComponent implements KeyListener {
     private static GameBoard gameBoard;

@@ -1,4 +1,4 @@
-import java.awt.*;
+import java.awt.Color;
 
 public class Player extends GameEntity {
     private int score = 0;

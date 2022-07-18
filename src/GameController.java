@@ -1,5 +1,6 @@
 import javax.swing.JComponent;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -32,7 +33,7 @@ public class GameController extends JComponent implements KeyListener {
         // Etc
     }
 
-    private long getElaspedTime()
+    private long getElapsedTime()
     {
         return System.currentTimeMillis() - gameStartTime;
     }
@@ -41,12 +42,12 @@ public class GameController extends JComponent implements KeyListener {
         gameStartTime = System.currentTimeMillis();
         repaint();
 
-        while(!quitNextUpdate) {
-            long elapsedTime = getElaspedTime();
+        while(isGameRunning) {
+            long elapsedTime = getElapsedTime();
             updateGame();
             repaint();
             elapsedTime += FRAME_DURATION;
-            long sleepDuration = elapsedTime - getElaspedTime();
+            long sleepDuration = elapsedTime - getElapsedTime();
             if (sleepDuration>=0)
             {
                 try
@@ -85,9 +86,6 @@ public class GameController extends JComponent implements KeyListener {
     // To debug movement, delete this once we have server implementation
     public void debugMovement() {
         switch (controlledPlayer.getNextDirection()) {
-            default:
-            case Stop:
-                return;
 
             case North:
                 controlledPlayer.setYPos(controlledPlayer.getYPos()-1);
@@ -104,20 +102,16 @@ public class GameController extends JComponent implements KeyListener {
             case West:
                 controlledPlayer.setXPos(controlledPlayer.getXPos()-1);
                 return;
+
+            default:
+            case Stop:
+                return;
         }
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
-        Direction direction;
         switch (e.getKeyCode()) {
-            default:
-                return;
 
             case KeyEvent.VK_Q:
             case KeyEvent.VK_ESCAPE:
@@ -131,24 +125,32 @@ public class GameController extends JComponent implements KeyListener {
 
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
-                direction = Direction.North;
+                controlledPlayer.setNextDirection(Direction.North);
                 break;
 
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
-                direction = Direction.East;
+                controlledPlayer.setNextDirection(Direction.East);
                 break;
 
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
-                direction = Direction.South;
+                controlledPlayer.setNextDirection(Direction.South);
                 break;
+
+            default:
+                return;
         }
-        controlledPlayer.setNextDirection(direction);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
 
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
 }

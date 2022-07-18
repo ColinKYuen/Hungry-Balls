@@ -1,6 +1,5 @@
 import javax.swing.JComponent;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,6 +10,8 @@ public class GameController extends JComponent implements KeyListener {
     private final long FRAME_DURATION = 1000/FRAMES_PER_SECOND;
     private boolean quitNextUpdate = false;
     private long gameStartTime;
+    private Player controlledPlayer;
+    private Player enemyPlayer;
 
     private void quit() {
         quitNextUpdate = true;
@@ -18,8 +19,13 @@ public class GameController extends JComponent implements KeyListener {
 
     public GameController() {
         gameBoard = new GameBoard();
+        controlledPlayer = gameBoard.getControllablePlayer();
+        enemyPlayer = gameBoard.getEnemyPlayer();
+
+
         // Set Up
         // Add players into a list and send info to game board
+
 
         // Server
         // Client
@@ -73,6 +79,36 @@ public class GameController extends JComponent implements KeyListener {
     public void updateGame()
     {
         // TODO: Update game here
+        // Later, all update game does is send and receive answer from server, and update game state according to server's answer
+
+        debugMovement();
+    }
+
+    // To debug movement, delete this once we have server implementation
+    public void debugMovement()
+    {
+        switch (controlledPlayer.getNextDirection())
+        {
+            default:
+            case Stop:
+                return;
+
+            case North:
+                controlledPlayer.setYPos(controlledPlayer.getYPos()-1);
+                return;
+
+            case South:
+                controlledPlayer.setYPos(controlledPlayer.getYPos()+1);
+                return;
+
+            case East:
+                controlledPlayer.setXPos(controlledPlayer.getXPos()+1);
+                return;
+
+            case West:
+                controlledPlayer.setXPos(controlledPlayer.getXPos()-1);
+                return;
+        }
     }
 
     @Override
@@ -112,6 +148,7 @@ public class GameController extends JComponent implements KeyListener {
                 direction = Direction.South;
                 break;
         }
+        controlledPlayer.setNextDirection(direction);
     }
 
     @Override

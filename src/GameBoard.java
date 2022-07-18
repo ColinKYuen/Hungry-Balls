@@ -10,8 +10,8 @@ public class GameBoard extends JComponent {
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
     private final List<GameEntity> players = new ArrayList();
     private final List<GameEntity> foods = new ArrayList();
-    private Player controllablePlayer;
-    private Player enemyPlayer;
+    private final Player controllablePlayer;
+    private final Player enemyPlayer;
 
     public GameBoard() {
         // Initialize Game Board

@@ -16,7 +16,10 @@ public class GameController extends JComponent {
     }
 
     public void start(){
-        repaint();
+        while (true) {
+            gameBoard.testDebug();
+            repaint();
+        }
     }
 
     /**

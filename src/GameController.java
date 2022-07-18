@@ -8,13 +8,13 @@ public class GameController extends JComponent implements KeyListener {
     private static GameBoard gameBoard;
     private final int FRAMES_PER_SECOND = 2;
     private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
-    private boolean quitNextUpdate = false;
+    private boolean isGameRunning= true;
     private long gameStartTime;
     private Player controlledPlayer;
     private Player enemyPlayer;
 
     private void quit() {
-        quitNextUpdate = true;
+        isGameRunning = false;
     }
 
     public GameController() {
@@ -41,8 +41,7 @@ public class GameController extends JComponent implements KeyListener {
         gameStartTime = System.currentTimeMillis();
         repaint();
 
-        while(!quitNextUpdate)
-        {
+        while(!quitNextUpdate) {
             long elapsedTime = getElaspedTime();
             updateGame();
             repaint();
@@ -76,8 +75,7 @@ public class GameController extends JComponent implements KeyListener {
         gameBoard.draw(g2);
     }
 
-    public void updateGame()
-    {
+    public void updateGame() {
         // TODO: Update game here
         // Later, all update game does is send and receive answer from server, and update game state according to server's answer
 
@@ -85,10 +83,8 @@ public class GameController extends JComponent implements KeyListener {
     }
 
     // To debug movement, delete this once we have server implementation
-    public void debugMovement()
-    {
-        switch (controlledPlayer.getNextDirection())
-        {
+    public void debugMovement() {
+        switch (controlledPlayer.getNextDirection()) {
             default:
             case Stop:
                 return;
@@ -130,7 +126,7 @@ public class GameController extends JComponent implements KeyListener {
 
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
-                direction = Direction.West;
+                controlledPlayer.setNextDirection(Direction.West);
                 break;
 
             case KeyEvent.VK_UP:

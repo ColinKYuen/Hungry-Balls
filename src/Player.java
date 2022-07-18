@@ -1,7 +1,7 @@
 import java.awt.*;
 
-public class Player extends GameEntity{
-    private int score=0;
+public class Player extends GameEntity {
+    private int score = 0;
     private Direction nextDirection = Direction.Stop;
 
     public Player(int xPos, int yPos, Color colour) {
@@ -20,8 +20,7 @@ public class Player extends GameEntity{
         return nextDirection;
     }
 
-    public void setNextDirection(Direction direction)
-    {
+    public void setNextDirection(Direction direction) {
         nextDirection = direction;
     }
 }

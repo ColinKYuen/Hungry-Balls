@@ -52,6 +52,9 @@ public class GameBoard extends JComponent {
         int x = (int) (Math.random() * Def.MAP_SIZE);
         int y = (int) (Math.random() * Def.MAP_SIZE);
         foods.add(new GameEntity(x, y, colour));
+        int a = (int) (Math.random() * Def.MAP_SIZE);
+        int b = (int) (Math.random() * Def.MAP_SIZE);
+        foods.add(new GameEntity(a, b, colour));
     }
 
     public Player getControllablePlayer() {
@@ -60,6 +63,10 @@ public class GameBoard extends JComponent {
 
     public Player getEnemyPlayer() {
         return enemyPlayer;
+    }
+
+    public List<GameEntity> getFoods() {
+        return foods;
     }
 
     public void testDebug() {

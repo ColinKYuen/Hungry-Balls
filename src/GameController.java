@@ -79,8 +79,8 @@ public class GameController extends JComponent implements KeyListener {
     public void updateGame() {
         // TODO: Update game here
         // Later, all update game does is send and receive answer from server, and update game state according to server's answer
-
         debugMovement();
+        eatFood();
     }
 
     // To debug movement, delete this once we have server implementation
@@ -106,6 +106,16 @@ public class GameController extends JComponent implements KeyListener {
             default:
             case Stop:
                 return;
+        }
+    }
+
+    public void eatFood(){
+        for(GameEntity food : gameBoard.getFoods()){
+            if(food.getXPos() == controlledPlayer.getXPos() && food.getYPos() == controlledPlayer.getYPos()){
+                gameBoard.getFoods().remove(food);
+                controlledPlayer.setScore(controlledPlayer.getScore() + 1);
+                break;
+            }
         }
     }
 

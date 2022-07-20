@@ -19,14 +19,14 @@ public class GameEntity {
     // Setters
     public void setXPos(int xPos) {
         // Bound checking, don't unwrap.
-        if (xPos < Def.MAP_SIZE || xPos >= 0) {
+        if (xPos < Def.MAP_SIZE && xPos >= 0) {
             this.xPos = xPos;
         }
     }
 
     public void setYPos(int yPos) {
         // Bound checking, don't unwrap.
-        if (yPos < Def.MAP_SIZE || yPos >= 0) {
+        if (yPos < Def.MAP_SIZE && yPos >= 0) {
             this.yPos = yPos;
         }
     }

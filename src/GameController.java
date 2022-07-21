@@ -67,7 +67,7 @@ public class GameController extends JComponent implements KeyListener {
         gameBoard.draw(g2);
     }
 
-    public void updateGame() {
+    private void updateGame() {
         // TODO: Update game here
         // Later, all update game does is send and receive answer from server, and update game state according to server's answer
 
@@ -75,7 +75,7 @@ public class GameController extends JComponent implements KeyListener {
     }
 
     // To debug movement, delete this once we have server implementation
-    public void debugMovement() {
+    private void debugMovement() {
         switch (controlledPlayer.getNextDirection()) {
             case North -> controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
             case South -> controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);

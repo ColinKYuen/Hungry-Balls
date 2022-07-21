@@ -109,12 +109,12 @@ public class GameController extends JComponent implements KeyListener {
     }
 
     private void triggerGameEnd(boolean isWinner) {
-        JFrame frame = new JFrame("Results");
-        String result = "";
+        final JFrame frame = new JFrame("Results");
+        final String result;
         if (isWinner) {
-            result += "Congrats, you won!";
+            result = "Congrats, you won!";
         } else {
-            result += "You lost. Better luck next time.";
+            result = "You lost. Better luck next time.";
         }
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);

@@ -60,12 +60,10 @@ public class GameBoard extends JComponent {
             }
         }
 
-        // Draw the Player
+        // Draw the Player & Score
         controllablePlayer.fillCircle(g2);
-        enemyPlayer.fillCircle(g2);
-
-        // Draw Score
         g2.drawString("Your Score: " + controllablePlayer.getScore(),0, (int) (1 * Def.G_GAP  / 2));
+        enemyPlayer.fillCircle(g2);
         g2.drawString("Opponent Score: " + enemyPlayer.getScore(),0, (int) (3 * Def.G_GAP / 4));
 
         // Draw the Food

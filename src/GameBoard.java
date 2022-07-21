@@ -8,7 +8,6 @@ import java.util.concurrent.locks.ReentrantLock;
 public class GameBoard extends JComponent {
     private final ReentrantLock[][] map = new ReentrantLock[Def.MAP_SIZE][Def.MAP_SIZE];
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
-    private final List<GameEntity> players = new ArrayList();
     private final List<GameEntity> foods = new ArrayList();
     private final Player controllablePlayer;
     private final Player enemyPlayer;
@@ -26,25 +25,11 @@ public class GameBoard extends JComponent {
         // TODO: Let Server determine starting position for both players, so each client can set their controllable player to the correct spot
         Color controllablePlayerColor = new Color(0, 0, 255);
         controllablePlayer = new Player(0,0,controllablePlayerColor);
-        players.add(controllablePlayer);
 
         // Assumes that your controllable player is blue and the default location is 7,7
         // TODO: Let Server determine starting position for both players, so each client can set their controllable player to the correct spot
         Color enemyPlayerColor = new Color(255, 0, 0);
         enemyPlayer = new Player(7,7,enemyPlayerColor);
-        players.add(enemyPlayer);
-
-        /*
-        // For debugging
-        // Initialize Player
-        for (int i = 0; i < 5; i++) {
-            Color colour = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
-            int x = (int) (Math.random() * Def.MAP_SIZE);
-            int y = (int) (Math.random() * Def.MAP_SIZE);
-            players.add(new GameEntity(x, y, colour));
-        }
-
-         */
 
         // For debugging
         // Initialize Food
@@ -62,13 +47,6 @@ public class GameBoard extends JComponent {
         return enemyPlayer;
     }
 
-    public void testDebug() {
-        for (GameEntity p : players) {
-            p.setXPos((p.getXPos() + 1) % Def.MAP_SIZE);
-            p.setYPos((p.getYPos() + 1) % Def.MAP_SIZE);
-        }
-    }
-
     /**
      * Render game board for client
      */
@@ -83,9 +61,12 @@ public class GameBoard extends JComponent {
         }
 
         // Draw the Player
-        for (GameEntity p : players) {
-            p.fillCircle(g2);
-        }
+        controllablePlayer.fillCircle(g2);
+        enemyPlayer.fillCircle(g2);
+
+        // Draw Score
+        g2.drawString("Your Score: " + controllablePlayer.getScore(),0, (int) (1 * Def.G_GAP  / 2));
+        g2.drawString("Opponent Score: " + enemyPlayer.getScore(),0, (int) (3 * Def.G_GAP / 4));
 
         // Draw the Food
         for (GameEntity f : foods) {

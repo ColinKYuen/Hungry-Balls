@@ -1,4 +1,4 @@
-import javax.swing.JComponent;
+import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -31,10 +31,6 @@ public class GameController extends JComponent implements KeyListener {
         // Etc
     }
 
-    private long getElapsedTime() {
-        return System.currentTimeMillis() - gameStartTime;
-    }
-
     public void start() {
         gameStartTime = System.currentTimeMillis();
         repaint();
@@ -55,6 +51,9 @@ public class GameController extends JComponent implements KeyListener {
                 System.out.println("Update and repaint took too long");
             }
         }
+
+        // Boolean value to indicate win / lose
+        triggerGameEnd(true);
     }
 
     /**
@@ -65,23 +64,6 @@ public class GameController extends JComponent implements KeyListener {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         gameBoard.draw(g2);
-    }
-
-    private void updateGame() {
-        // TODO: Update game here
-        // Later, all update game does is send and receive answer from server, and update game state according to server's answer
-
-        debugMovement();
-    }
-
-    // To debug movement, delete this once we have server implementation
-    private void debugMovement() {
-        switch (controlledPlayer.getNextDirection()) {
-            case North -> controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
-            case South -> controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
-            case East -> controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
-            case West -> controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
-        }
     }
 
     @Override
@@ -103,5 +85,38 @@ public class GameController extends JComponent implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) {
 
+    }
+
+    private long getElapsedTime() {
+        return System.currentTimeMillis() - gameStartTime;
+    }
+
+    private void updateGame() {
+        // TODO: Update game here
+        // Later, all update game does is send and receive answer from server, and update game state according to server's answer
+
+        debugMovement();
+    }
+
+    // To debug movement, delete this once we have server implementation
+    private void debugMovement() {
+        switch (controlledPlayer.getNextDirection()) {
+            case North -> controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
+            case South -> controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
+            case East -> controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
+            case West -> controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
+        }
+    }
+
+    private void triggerGameEnd(boolean isWinner) {
+        JFrame frame = new JFrame("Results");
+        String result = "";
+        if (isWinner) {
+            result += "Congrats, you won!";
+        } else {
+            result += "You lost. Better luck next time.";
+        }
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
     }
 }

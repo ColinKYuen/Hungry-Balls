@@ -23,44 +23,35 @@ public class GameController extends JComponent implements KeyListener {
         controlledPlayer = gameBoard.getControllablePlayer();
         enemyPlayer = gameBoard.getEnemyPlayer();
 
-
         // Set Up
         // Add players into a list and send info to game board
-
 
         // Server
         // Client
         // Etc
     }
 
-    private long getElapsedTime()
-    {
+    private long getElapsedTime() {
         return System.currentTimeMillis() - gameStartTime;
     }
 
-    public void start(){
+    public void start() {
         gameStartTime = System.currentTimeMillis();
         repaint();
 
-        while(isGameRunning) {
+        while (isGameRunning) {
             long elapsedTime = getElapsedTime();
             updateGame();
             repaint();
             elapsedTime += FRAME_DURATION;
             long sleepDuration = elapsedTime - getElapsedTime();
-            if (sleepDuration>=0)
-            {
-                try
-                {
+            if (sleepDuration >= 0) {
+                try {
                     Thread.sleep(sleepDuration);
-                }
-                catch(InterruptedException ex)
-                {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
-            }
-            else
-            {
+            } else {
                 System.out.println("Update and repaint took too long");
             }
         }
@@ -86,60 +77,21 @@ public class GameController extends JComponent implements KeyListener {
     // To debug movement, delete this once we have server implementation
     public void debugMovement() {
         switch (controlledPlayer.getNextDirection()) {
-
-            case North:
-                controlledPlayer.setYPos(controlledPlayer.getYPos()-1);
-                return;
-
-            case South:
-                controlledPlayer.setYPos(controlledPlayer.getYPos()+1);
-                return;
-
-            case East:
-                controlledPlayer.setXPos(controlledPlayer.getXPos()+1);
-                return;
-
-            case West:
-                controlledPlayer.setXPos(controlledPlayer.getXPos()-1);
-                return;
-
-            default:
-            case Stop:
-                return;
+            case North -> controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
+            case South -> controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
+            case East -> controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
+            case West -> controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
         }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-
-            case KeyEvent.VK_Q:
-            case KeyEvent.VK_ESCAPE:
-                quit();
-                return;
-
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-                controlledPlayer.setNextDirection(Direction.West);
-                break;
-
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-                controlledPlayer.setNextDirection(Direction.North);
-                break;
-
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                controlledPlayer.setNextDirection(Direction.East);
-                break;
-
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-                controlledPlayer.setNextDirection(Direction.South);
-                break;
-
-            default:
-                return;
+            case KeyEvent.VK_Q, KeyEvent.VK_ESCAPE -> quit();
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> controlledPlayer.setNextDirection(Direction.West);
+            case KeyEvent.VK_UP, KeyEvent.VK_W -> controlledPlayer.setNextDirection(Direction.North);
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> controlledPlayer.setNextDirection(Direction.East);
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> controlledPlayer.setNextDirection(Direction.South);
         }
     }
 
@@ -152,5 +104,4 @@ public class GameController extends JComponent implements KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
-
 }

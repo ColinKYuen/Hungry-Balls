@@ -69,11 +69,30 @@ public class GameController extends JComponent implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_Q, KeyEvent.VK_ESCAPE -> quit();
-            case KeyEvent.VK_LEFT, KeyEvent.VK_A -> controlledPlayer.setNextDirection(Direction.West);
-            case KeyEvent.VK_UP, KeyEvent.VK_W -> controlledPlayer.setNextDirection(Direction.North);
-            case KeyEvent.VK_RIGHT, KeyEvent.VK_D -> controlledPlayer.setNextDirection(Direction.East);
-            case KeyEvent.VK_DOWN, KeyEvent.VK_S -> controlledPlayer.setNextDirection(Direction.South);
+            case KeyEvent.VK_Q:
+            case KeyEvent.VK_ESCAPE:
+                quit();
+                break;
+
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
+                controlledPlayer.setNextDirection(Direction.West);
+                break;
+
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
+                controlledPlayer.setNextDirection(Direction.North);
+                break;
+
+            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
+                controlledPlayer.setNextDirection(Direction.East);
+                break;
+
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+                controlledPlayer.setNextDirection(Direction.South);
+                break;
         }
     }
 
@@ -101,10 +120,21 @@ public class GameController extends JComponent implements KeyListener {
     // To debug movement, delete this once we have server implementation
     private void debugMovement() {
         switch (controlledPlayer.getNextDirection()) {
-            case North -> controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
-            case South -> controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
-            case East -> controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
-            case West -> controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
+            case North:
+                controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
+                break;
+
+            case South:
+                controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
+                break;
+
+            case East:
+                controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
+                break;
+
+            case West:
+                controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
+                break;
         }
     }
 

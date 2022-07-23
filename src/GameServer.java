@@ -8,10 +8,30 @@ import java.net.Socket;
 
 public class GameServer extends JFrame {
 
-    ServerSocket listener;
-    Socket socket;
-    BufferedReader input;
-    PrintWriter output;
+    private ServerSocket listener;
+    private Socket socket;
+    private BufferedReader input;
+    private PrintWriter output;
+
+    private GameController gameController;
+    private GameBoard gameBoard;
+
+    // TODO: Make this into multithread (runnable?)
+    public GameServer() throws IOException{
+        ServerSocket listener = new ServerSocket(3000);
+        System.out.println("Game is running");
+        //init function
+        try{
+            while(true){
+                setPositions(listener.accept());
+
+            }
+        } finally {
+            System.out.println("closing");
+            listener.close();
+        }
+
+    }
 
     private void setPositions(Socket socket) {
         this.socket = socket;
@@ -26,24 +46,43 @@ public class GameServer extends JFrame {
         }
     }
 
-    public GameServer() throws IOException{
-        ServerSocket listener = new ServerSocket(3000);
-        System.out.println("Game is running");
-        //init function
-        try{
-            while(true){
-                setPositions(listener.accept());
-                System.out.println("inside");
-            }
-        } finally {
-            System.out.println("closing");
-            listener.close();
-        }
+    public void updateGameState() {
 
     }
-    public static void main(String[] args) throws Exception{
-        GameServer server = new GameServer();
+
+    private Direction parseDirection (String clientMsg) {
+        switch (clientMsg) {
+            case "N":
+                return Direction.North;
+            case "S":
+                return Direction.South;
+            case "E":
+                return Direction.East;
+            case "W":
+                return Direction.West;
+            case "T":
+                return Direction.Stop;
+            case "Q":
+                return Direction.Quit;
+            default:
+                return null;
+        }
     }
+
+    public String createMsg()
+    {
+        //TODO: Finish this
+        return "";
+    }
+
+    public void sendGameState () {
+        // TODO: Prepare string to send
+        // TODO: Make sure both clients have connected before sending game state
+    }
+
+//    public static void main(String[] args) throws Exception{
+//        GameServer server = new GameServer();
+//    }
 
 
 }

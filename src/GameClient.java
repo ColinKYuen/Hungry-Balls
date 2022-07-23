@@ -18,6 +18,27 @@ public class GameClient extends JFrame {
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+
+    private GameBoard gameBoard;
+    private Player controllablePlayer;
+
+    // TODO: Make this multithreaded (runnable?)
+    public GameClient(String serverAddress) throws Exception{ //serverAddress = IP(hard code too)
+
+        try {
+            socket = new Socket(serverAddress,PORT);
+            //init function;
+            while(true){
+                setPosition(socket);
+                sendMessage();
+            }
+        } finally {
+            System.out.println("closing socket");
+            socket.close();
+        }
+
+    }
+
     private void setPosition(Socket socket){ //set position function for the player
         this.socket = socket;
         try{
@@ -35,28 +56,41 @@ public class GameClient extends JFrame {
 
 
     }
-    public GameClient(String serverAddress) throws Exception{ //serverAddress = IP(hard code too)
 
-        try {
-            socket = new Socket(serverAddress,PORT);
-            //init function;
-            while(true){
-                setPosition(socket);
-                System.out.println("inside");
-            }
-        } finally {
-            System.out.println("closing socket");
-            socket.close();
+
+    public String createMsg(Direction direction) {
+        switch (direction){
+            case North:
+                return "N";
+            case South:
+                return "S";
+            case East:
+                return "E";
+            case West:
+                return "W";
+            case Stop:
+                return "T";
+            case Quit:
+                return "Q";
+            default:
+                return "";
         }
-        
+    }
+
+    public void sendMessage(){
+        //TODO: Finish this
+    }
+
+    public void parseGameState() {
+        // TODO: Parse game state
     }
 
     //init function can be here
 
-    public static void main(String[] args) throws Exception{
-        GameClient client = new GameClient("127.0.0.1"); // local host IP add for now
-        
-    }
+//    public static void main(String[] args) throws Exception{
+//        GameClient client = new GameClient("127.0.0.1"); // local host IP add for now
+//
+//    }
 
 
 

@@ -48,14 +48,13 @@ public class GameClient extends JFrame {
                 String GameState = in.readLine();
                 //more below to get the move and move the player
                 //parse GameState after recevied the GameState
-                //GameState come in the form of x1,y1,s1,x2,y2,s2
-                String Location1 = GameState.substring(0, 3);   //x1,y1
-                String score1 = Character.toString(GameState.charAt(4));      //s1
-                //String score1 = GameState.substring(4, 5);      //s1
-                String Location2 = GameState.substring(6, 9);   //x2,y2
-                String score2 = Character.toString(GameState.charAt(10));      //s2
-                //String s2 = GameState.substring(10);                     //s2
-
+                //GameState come in the form of x1,y1,s1,x2,y2,s2 
+                //position of player 1 with coordinate x1,y1 and then position of player 2 with coordinate x2,y2
+                //s1 is score of player 1, s2 is score of player 2 which the server will keep track
+                String Location1 = GameState.substring(0, 3);     //x1,y1 [ 0 to 2]
+                String score1 = Character.toString(GameState.charAt(4));        //s1 [4]
+                String Location2 = GameState.substring(6, 9);    //x2,y2 [6 to 8]
+                String score2 = Character.toString(GameState.charAt(10));      //s2 [10]
                 //listen to the move and then send to the server side
                 sendMessage();
 
@@ -89,7 +88,7 @@ public class GameClient extends JFrame {
 
     public void sendMessage(){
         //TODO: Finish this
-        //direction depends on the key pressed
+        //direction depends on the key pressed[keypressed are in game controller part]
         //direction will come from keylistener or keybinding
         //then direction get convert into a message to be sent to the server side
         Direction dir;

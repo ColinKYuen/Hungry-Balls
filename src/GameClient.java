@@ -50,9 +50,11 @@ public class GameClient extends JFrame {
                 //parse GameState after recevied the GameState
                 //GameState come in the form of x1,y1,s1,x2,y2,s2
                 String Location1 = GameState.substring(0, 3);   //x1,y1
-                String score1 = GameState.substring(4, 5);      //s1
+                String score1 = Character.toString(GameState.charAt(4));      //s1
+                //String score1 = GameState.substring(4, 5);      //s1
                 String Location2 = GameState.substring(6, 9);   //x2,y2
-                String s2 = GameState.substring(10);                     //s2
+                String score2 = Character.toString(GameState.charAt(10));      //s2
+                //String s2 = GameState.substring(10);                     //s2
 
                 //listen to the move and then send to the server side
                 sendMessage();
@@ -65,7 +67,6 @@ public class GameClient extends JFrame {
 
 
     }
-
 
     public String createMsg(Direction direction) {
         switch (direction){

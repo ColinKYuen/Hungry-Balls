@@ -45,8 +45,17 @@ public class GameClient extends JFrame {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(),true);
             while(true){
-                String commandMove = in.readLine();
+                String GameState = in.readLine();
                 //more below to get the move and move the player
+                //parse GameState after recevied the GameState
+                //GameState come in the form of x1,y1,s1,x2,y2,s2
+                String Location1 = GameState.substring(0, 3);   //x1,y1
+                String score1 = GameState.substring(4, 5);      //s1
+                String Location2 = GameState.substring(6, 9);   //x2,y2
+                String s2 = GameState.substring(10);                     //s2
+
+                //listen to the move and then send to the server side
+                sendMessage();
 
             }
         } catch (IOException e) {
@@ -79,10 +88,18 @@ public class GameClient extends JFrame {
 
     public void sendMessage(){
         //TODO: Finish this
+        //direction depends on the key pressed
+        //direction will come from keylistener or keybinding
+        //then direction get convert into a message to be sent to the server side
+        Direction dir;
+        String message = createMsg(dir);
+        out.println(message);
     }
 
     public void parseGameState() {
         // TODO: Parse game state
+        //parse in setPosition()
+
     }
 
     //init function can be here

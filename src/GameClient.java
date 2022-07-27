@@ -1,18 +1,17 @@
 //import javax.swing.JComponent;
 //import java.awt.Graphics2D;
 //import java.awt.Graphics;
+
 import javax.swing.JFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-//import java.net.ServerSocket;
 import java.net.Socket;
-//import javax.swing.Timer;
 
 //commented out some import that are not used right now but may need it later
 
-
+// TODO: Make the client loop and call gameBoard.draw to redraw the board
 public class GameClient extends JFrame {
     private static int PORT = 3000; //hard code the port number
     private Socket socket;
@@ -23,12 +22,12 @@ public class GameClient extends JFrame {
     private Player controllablePlayer;
 
     // TODO: Make this multithreaded (runnable?)
-    public GameClient(String serverAddress) throws Exception{ //serverAddress = IP(hard code too)
+    public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
 
         try {
             socket = new Socket(serverAddress,PORT);
             //init function;
-            while(true){
+            while (true){
                 setPosition(socket);
                 sendMessage();
             }
@@ -39,12 +38,12 @@ public class GameClient extends JFrame {
 
     }
 
-    private void setPosition(Socket socket){ //set position function for the player
+    private void setPosition(Socket socket) { //set position function for the player
         this.socket = socket;
-        try{
+        try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(),true);
-            while(true){
+            while (true) {
                 String GameState = in.readLine();
                 //more below to get the move and move the player
                 //parse GameState after recevied the GameState
@@ -68,7 +67,7 @@ public class GameClient extends JFrame {
     }
 
     public String createMsg(Direction direction) {
-        switch (direction){
+        switch (direction) {
             case North:
                 return "N";
             case South:
@@ -86,12 +85,12 @@ public class GameClient extends JFrame {
         }
     }
 
-    public void sendMessage(){
+    public void sendMessage() {
         //TODO: Finish this
         //direction depends on the key pressed[keypressed are in game controller part]
         //direction will come from keylistener or keybinding
         //then direction get convert into a message to be sent to the server side
-        Direction dir;
+        Direction dir=Direction.Stop;
         String message = createMsg(dir);
         out.println(message);
     }

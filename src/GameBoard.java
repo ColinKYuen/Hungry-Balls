@@ -1,5 +1,6 @@
 import javax.swing.JComponent;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,16 @@ public class GameBoard extends JComponent {
 
     public Player getEnemyPlayer() {
         return enemyPlayer;
+    }
+
+    /**
+     * Render game board for client
+     * @param g
+     */
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D) g;
+        draw(g2);
     }
 
     /**

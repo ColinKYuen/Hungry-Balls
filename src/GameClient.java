@@ -25,9 +25,9 @@ public class GameClient extends JFrame implements KeyListener {
     private Player controllablePlayer;
     private Direction inputDirection;
 
-    // TODO: Make a loop of rendering the gameBoard and sending the direction
-    public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
 
+    public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
+        // TODO: Initialize the game
         try {
             socket = new Socket(serverAddress,PORT);
             //init function;
@@ -40,6 +40,11 @@ public class GameClient extends JFrame implements KeyListener {
             socket.close();
         }
 
+    }
+
+    // Returns the win/lose state
+    public Boolean start() {
+        // TODO: Make a loop of rendering the gameBoard and sending the direction
     }
 
     private void setPosition(Socket socket) { //set position function for the player
@@ -100,7 +105,7 @@ public class GameClient extends JFrame implements KeyListener {
     }
 
     public void parseGameState() {
-        // TODO: Parse game state
+        // TODO: Parse game state, remember to also parse if it wins or loses
         //parse in setPosition()
 
     }

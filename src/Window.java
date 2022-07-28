@@ -1,7 +1,8 @@
-import javax.swing.JFrame;
+import javax.swing.*;
 
+// Window will start the game on the client
 public class Window {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame();
 
         frame.setSize(Def.WIDTH, Def.HEIGHT);
@@ -9,14 +10,29 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        GameController component = new GameController();
+        GameClient component = new GameClient(args[0]);
         frame.add(component);
         frame.addKeyListener(component);
 
         frame.setVisible(true);
 
-        component.start();
+        Boolean isWon = component.start();
+
         frame.setVisible(false);
         frame.dispose();
     }
+
+
+    private void triggerGameEnd(boolean isWinner) {
+        final JFrame frame = new JFrame("Results");
+        final String result;
+        if (isWinner) {
+            result = "Congrats, you won!";
+        } else {
+            result = "You lost. Better luck next time.";
+        }
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
+    }
+
 }

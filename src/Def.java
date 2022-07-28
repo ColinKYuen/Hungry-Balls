@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class Def {
     // Window Size
     final static int WINDOW_SIZE = 600;
@@ -10,4 +12,20 @@ public class Def {
     // For Drawing
     final static double G_WIDTH = Math.ceil((double)WINDOW_SIZE / (MAP_SIZE + 1));
     final static double G_GAP = G_WIDTH / 2;
+
+    // Number of players
+    final static int NUM_OF_PLAYERS = 2;
+
+    // Player 1 Initial Position and Color (Blue)
+    final static int P1_X_POS = 0;
+    final static int P1_Y_POS = 0;
+    final static Color P1_COLOR = new Color(0,0,255);
+
+    // Player 2 Initial Position and Color (Red)
+    final static int P2_X_POS = 7;
+    final static int P2_Y_POS = 7;
+    final static Color P2_COLOR = new Color(255,0,0);
+
+    // Food Color (Green)
+    final static Color F_COLOR = new Color(0,255,0);
 }

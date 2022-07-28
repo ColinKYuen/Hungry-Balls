@@ -32,25 +32,16 @@ public class GameClient extends JFrame implements KeyListener {
         socket = new Socket(serverAddress,PORT);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(),true);
-        //init function;
-//            while (true){
-//                setPosition(socket);
-//                sendMessage();
-//            }
         out.println("00"); // First, send initializing message
         String initResponse = in.readLine();
         String[] gameStateStrings = initResponse.split(",");
         List<Player> players = new ArrayList<>();
         players.add(new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0));
-        players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,0));
+        players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,1));
         List<GameEntity> foods = new ArrayList<>();
         foods.add(new GameEntity(Integer.getInteger(gameStateStrings[6]),Integer.getInteger(gameStateStrings[7]),Def.F_COLOR));
         playerID = Integer.getInteger(gameStateStrings[8]);
         gameBoard = new GameBoard(players,foods,playerID);
-//        } finally {
-//            System.out.println("closing socket");
-//            socket.close();
-//        }
 
     }
 
@@ -61,7 +52,6 @@ public class GameClient extends JFrame implements KeyListener {
         while (isGameRunning) {
             // To do in this loop:
             // 1. Send message of player input to the server
-                // If inputDirection is Quit, immediately return false
             sendMessage();
             // 2. Wait for a response from the server
             String initResponse = in.readLine();
@@ -70,54 +60,35 @@ public class GameClient extends JFrame implements KeyListener {
             String[] gameStateStrings = initResponse.split(",");
             if(gameStateStrings.equals("W")){
                 //when a player win a game
-                return TRUE;
+                out.close();
+                in.close();
+                socket.close();
+                return true;
             } else if (gameStateStrings.equals("L")) {
                 //when a player lose a game
-                return FALSE;
+                out.close();
+                in.close();
+                socket.close();
+                return false;
             } else {
                 //the game is still on
                 // 4. Update the game board according to the response from Server
-                // Implement and call the updateGameBoard() function below
+                // Implement and call the updateEntities() function below
                 List<Player> players = new ArrayList<>();
-                players.add(new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0));
-                players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,0));
+                Player player1 = new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0);
+                player1.setScore(Integer.getInteger(gameStateStrings[2]));
+                Player player2 = new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,1);
+                player2.setScore(Integer.getInteger(gameStateStrings[5]));
+                players.add(player1);
+                players.add(player2);
                 List<GameEntity> foods = new ArrayList<>();
                 foods.add(new GameEntity(Integer.getInteger(gameStateStrings[6]),Integer.getInteger(gameStateStrings[7]),Def.F_COLOR));
                 playerID = Integer.getInteger(gameStateStrings[8]);
                 gameBoard = new GameBoard(players,foods,playerID);
                 gameBoard.updateEntities(players,foods);
-
             }
-
-
         }
-    }
-
-    private void setPosition(Socket socket) { //set position function for the player
-        this.socket = socket;
-        try {
-            while (true) {
-                String GameState = in.readLine();
-                //more below to get the move and move the player
-                //parse GameState after recevied the GameState
-                //GameState come in the form of x1,y1,s1,x2,y2,s2 
-                //position of player 1 with coordinate x1,y1 and then position of player 2 with coordinate x2,y2
-                //s1 is score of player 1, s2 is score of player 2 which the server will keep track
-                String Location1 = GameState.substring(0, 3);     //x1,y1 [ 0 to 2]
-                String score1 = Character.toString(GameState.charAt(4));        //s1 [4]
-                String Location2 = GameState.substring(6, 9);    //x2,y2 [6 to 8]
-                String score2 = Character.toString(GameState.charAt(10));      //s2 [10]
-                // Update Game Board using gameBoard.updateEntities
-                // listen to the move and then send to the server side
-                sendMessage();
-
-            }
-        } catch (IOException e) {
-            //TODO: handle exception
-            System.out.println("Game end: " + e);
-        }
-
-
+        return false;
     }
 
     public String createMsg(Direction direction) {
@@ -146,10 +117,6 @@ public class GameClient extends JFrame implements KeyListener {
         Direction dir=inputDirection;
         String message = createMsg(dir);
         out.println(message);
-    }
-
-    private void updateGameBoard(String[] gameStateString){
-        // TODO: Update the game board here
     }
 
     private void quit() {
@@ -195,15 +162,4 @@ public class GameClient extends JFrame implements KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
-
-
-    //init function can be here
-
-//    public static void main(String[] args) throws Exception{
-//        GameClient client = new GameClient("127.0.0.1"); // local host IP add for now
-//
-//    }
-
-
-
 }

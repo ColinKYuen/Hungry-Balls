@@ -10,10 +10,10 @@ public class GameBoard extends JComponent {
     private final ReentrantLock[][] map = new ReentrantLock[Def.MAP_SIZE][Def.MAP_SIZE];
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
     private final List<GameEntity> foods = new ArrayList();
-    private final Player controllablePlayer;
-    private final Player enemyPlayer;
+    private final List<Player> players = new ArrayList<>();
+    private final int playerID;
 
-    public GameBoard() {
+    public GameBoard(List<Player> players, List<GameEntity> foods, int playerID) {
         // Initialize Game Board
         for (int i = 0; i < Def.MAP_SIZE; i++) {
             for (int j = 0; j < Def.MAP_SIZE; j++) {
@@ -22,41 +22,16 @@ public class GameBoard extends JComponent {
             }
         }
 
-        // Assumes that your controllable player is blue and the default location is 0,0
-        // TODO: Let Server determine starting position for both players, so each client can set their controllable player to the correct spot
-        Color controllablePlayerColor = new Color(0, 0, 255);
-        controllablePlayer = new Player(0,0,controllablePlayerColor);
-
-        // Assumes that your controllable player is blue and the default location is 7,7
-        // TODO: Let Server determine starting position for both players, so each client can set their controllable player to the correct spot
-        Color enemyPlayerColor = new Color(255, 0, 0);
-        enemyPlayer = new Player(7,7,enemyPlayerColor);
-
-        // For debugging
-        // Initialize Food
-        Color colour = new Color((float)Math.random(), (float)Math.random(), (float)Math.random());
-        int x = (int) (Math.random() * Def.MAP_SIZE);
-        int y = (int) (Math.random() * Def.MAP_SIZE);
-        foods.add(new GameEntity(x, y, colour));
+        this.players.addAll(players);
+        this.foods.addAll(foods);
+        this.playerID=playerID;
     }
 
-    public Player getControllablePlayer() {
-        return controllablePlayer;
-    }
-
-    public Player getEnemyPlayer() {
-        return enemyPlayer;
-    }
-
-    public String getStringOfFoodPosition() {
-        GameEntity food = foods.get(0);
-        int xPos = food.getXPos();
-        int yPos = food.getYPos();
-        return Integer.toString(xPos) + "," + Integer.toString(yPos);
-    }
-
-    public void changeFoodPosition () {
-        // TODO: Implement random function here. Remember to exclude the current positions of the either players as the new position
+    public void updateEntities (List<Player> players, List<GameEntity> foods){
+        this.players.removeAll(players);
+        this.players.addAll(players);
+        this.foods.removeAll(foods);
+        this.foods.addAll(foods);
     }
 
     /**
@@ -83,8 +58,11 @@ public class GameBoard extends JComponent {
         }
 
         // Draw the Player & Score
+        Player controllablePlayer = players.get(playerID);
         controllablePlayer.fillCircle(g2);
         g2.drawString("Your Score: " + controllablePlayer.getScore(),0, (int) (1 * Def.G_GAP  / 2));
+        int enemyPlayerID = playerID==0 ? 1:0; // Assumes only 2 players
+        Player enemyPlayer = players.get(enemyPlayerID);
         enemyPlayer.fillCircle(g2);
         g2.drawString("Opponent Score: " + enemyPlayer.getScore(),0, (int) (3 * Def.G_GAP / 4));
 

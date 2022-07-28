@@ -20,8 +20,8 @@ public class GameController extends JComponent{
     public GameController(ClientList clientList) {
         this.clientList = clientList;
 
-        players.add(new Player(1,1,Def.P1_COLOR,0));
-        players.add(new Player(8,8,Def.P2_COLOR,1));
+        players.add(new Player(Def.P1_X_INITIAL_POS,Def.P1_Y_INITIAL_POS,Def.P1_COLOR,0));
+        players.add(new Player(Def.P2_X_INITIAL_POS,Def.P2_Y_INITIAL_POS,Def.P2_COLOR,1));
 
         int foodYPos;
         int foodXPos;
@@ -140,6 +140,7 @@ public class GameController extends JComponent{
             for (GameEntity f : foods){
                 result = result + Integer.toString(f.getXPos()) + "," + Integer.toString(f.getYPos());
             }
+            result = result + Integer.toString(playerID);
             return result;
         }
     }

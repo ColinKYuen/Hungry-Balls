@@ -3,6 +3,8 @@
 //import java.awt.Graphics;
 
 import javax.swing.JFrame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +14,8 @@ import java.net.Socket;
 //commented out some import that are not used right now but may need it later
 
 // TODO: Make the client loop and call gameBoard.draw to redraw the board
-public class GameClient extends JFrame {
+public class GameClient extends JFrame implements KeyListener {
+    private boolean isGameRunning= true;
     private static int PORT = 3000; //hard code the port number
     private Socket socket;
     private BufferedReader in;
@@ -20,8 +23,9 @@ public class GameClient extends JFrame {
 
     private GameBoard gameBoard;
     private Player controllablePlayer;
+    private Direction inputDirection;
 
-    // TODO: Make this multithreaded (runnable?)
+    // TODO: Make a loop of rendering the gameBoard and sending the direction
     public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
 
         try {
@@ -90,7 +94,7 @@ public class GameClient extends JFrame {
         //direction depends on the key pressed[keypressed are in game controller part]
         //direction will come from keylistener or keybinding
         //then direction get convert into a message to be sent to the server side
-        Direction dir=Direction.Stop;
+        Direction dir=inputDirection;
         String message = createMsg(dir);
         out.println(message);
     }
@@ -100,6 +104,51 @@ public class GameClient extends JFrame {
         //parse in setPosition()
 
     }
+
+    private void quit() {
+        isGameRunning = false;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_Q:
+            case KeyEvent.VK_ESCAPE:
+                quit();
+                break;
+
+            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_A:
+                inputDirection=Direction.East;
+                break;
+
+            case KeyEvent.VK_UP:
+            case KeyEvent.VK_W:
+                inputDirection= Direction.North;
+                break;
+
+            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_D:
+                inputDirection= Direction.West;
+                break;
+
+            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_S:
+                inputDirection= Direction.South;
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
 
     //init function can be here
 

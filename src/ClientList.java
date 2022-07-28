@@ -9,15 +9,13 @@ public class ClientList {
 
     public ClientList (){
         clientUpdatedMap = new ConcurrentHashMap<>();
-        for (int i=0; i<Def.NUM_OF_PLAYERS;i++) {
-            clientUpdatedMap.put(i,false);
-        }
-        clientCounter = -1;
     }
 
     public synchronized int generatePlayerID() {
+        int playerID=clientCounter;
         clientCounter++;
-        return clientCounter%2;
+        clientUpdatedMap.put(playerID, false);
+        return playerID;
     }
 
     public int getCurrentCount() {
@@ -30,8 +28,8 @@ public class ClientList {
 
     public boolean isAllPlayersUpdated () {
         // Return true if all elements are true
-        for (int i=0;i<Def.NUM_OF_PLAYERS;i++){
-            if (!clientUpdatedMap.get(i)){
+        for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
+            if (!clientUpdatedMap.get(i)) {
                 return false;
             }
         }
@@ -40,11 +38,15 @@ public class ClientList {
 
     public boolean isReadyForNextUpdate () {
         // Return true if all elements are false
-        for (int i=0;i<Def.NUM_OF_PLAYERS;i++){
+        for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
             if (clientUpdatedMap.get(i)){
                 return false;
             }
         }
         return true;
+    }
+
+    public ConcurrentHashMap<Integer, Boolean> getClientUpdatedMap() {
+        return clientUpdatedMap;
     }
 }

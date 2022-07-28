@@ -2,7 +2,6 @@
 //import java.awt.Graphics2D;
 //import java.awt.Graphics;
 
-import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -36,10 +35,16 @@ public class GameClient implements KeyListener {
         String initResponse = in.readLine();
         String[] gameStateStrings = initResponse.split(",");
         List<Player> players = new ArrayList<>();
-        players.add(new Player(Integer.parseInt(gameStateStrings[0]),Integer.parseInt(gameStateStrings[1]),Def.P1_COLOR,0));
-        players.add(new Player(Integer.parseInt(gameStateStrings[3]),Integer.parseInt(gameStateStrings[4]),Def.P2_COLOR,1));
+        players.add(new Player(Integer.parseInt(gameStateStrings[0]),
+                Integer.parseInt(gameStateStrings[1]),
+                Def.P1_COLOR,0));
+        players.add(new Player(Integer.parseInt(gameStateStrings[3]),
+                Integer.parseInt(gameStateStrings[4]),
+                Def.P2_COLOR,1));
         List<GameEntity> foods = new ArrayList<>();
-        foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),Integer.parseInt(gameStateStrings[7]),Def.F_COLOR));
+        foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),
+                Integer.parseInt(gameStateStrings[7]),
+                Def.F_COLOR));
         playerID = Integer.parseInt(gameStateStrings[8]);
         gameBoard = new GameBoard(players,foods,playerID);
 
@@ -59,13 +64,13 @@ public class GameClient implements KeyListener {
             // 3. Parse the response
                 // Check if the response is win or lose, if it is, return true or false
             String[] gameStateStrings = initResponse.split(",");
-            if(gameStateStrings.equals("W")){
+            if (gameStateStrings[0].equals("V")) {
                 //when a player win a game
                 out.close();
                 in.close();
                 socket.close();
                 return true;
-            } else if (gameStateStrings.equals("L")) {
+            } else if (gameStateStrings[0].equals("L")) {
                 //when a player lose a game
                 out.close();
                 in.close();
@@ -85,7 +90,7 @@ public class GameClient implements KeyListener {
                 List<GameEntity> foods = new ArrayList<>();
                 foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),Integer.parseInt(gameStateStrings[7]),Def.F_COLOR));
                 playerID = Integer.parseInt(gameStateStrings[8]);
-                gameBoard = new GameBoard(players,foods,playerID);
+                System.out.println("about to update entities");
                 gameBoard.updateEntities(players,foods);
             }
         }
@@ -138,7 +143,7 @@ public class GameClient implements KeyListener {
 
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
-                inputDirection=Direction.East;
+                inputDirection=Direction.West;
                 break;
 
             case KeyEvent.VK_UP:
@@ -148,7 +153,7 @@ public class GameClient implements KeyListener {
 
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
-                inputDirection= Direction.West;
+                inputDirection= Direction.East;
                 break;
 
             case KeyEvent.VK_DOWN:

@@ -1,4 +1,8 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerChild implements Runnable{
@@ -37,12 +41,11 @@ public class ServerChild implements Runnable{
                 clientList.setClientUpdated(playerID,true);
                 gameController.setPlayerNextDirection(playerID,proposedDir);
 
-                // TODO: Debug here (Busywait loop doesn't finish)
                 while (!clientList.isReadyForNextUpdate()){} // Block while not ready for next update
                 String gameStateString = gameController.generateGameStateString(playerID);
                 System.out.println(gameStateString);
                 out.println(gameStateString);
-                if (gameStateString.equals("W") || gameStateString.equals("L")) {
+                if (gameStateString.equals("V") || gameStateString.equals("L")) {
                     out.close();
                     in.close();
                     client.close();

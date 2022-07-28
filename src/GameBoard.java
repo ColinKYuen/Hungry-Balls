@@ -24,14 +24,15 @@ public class GameBoard extends JComponent {
 
         this.players.addAll(players);
         this.foods.addAll(foods);
-        this.playerID=playerID;
+        this.playerID = playerID;
     }
 
-    public void updateEntities (List<Player> players, List<GameEntity> foods){
-        this.players.removeAll(players);
-        this.players.addAll(players);
-        this.foods.removeAll(foods);
-        this.foods.addAll(foods);
+    public void updateEntities (List<Player> newPlayers, List<GameEntity> newFoods){
+        this.players.clear();
+        this.players.addAll(newPlayers);
+        this.foods.clear();
+        this.foods.addAll(newFoods);
+        repaint();
     }
 
     /**

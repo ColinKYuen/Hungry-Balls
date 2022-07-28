@@ -28,15 +28,13 @@ public class GameServer{
             ServerChild childThread = new ServerChild(client,gameController,clientList);
             executorService.execute(childThread);
         }
-        executorService.shutdown();
         System.out.println("Game Start");
         gameController.start();
+        executorService.shutdown();
         executorService.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         GameServer server = new GameServer();
     }
-
-
 }

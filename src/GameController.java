@@ -85,7 +85,6 @@ public class GameController extends JComponent{
     }
 
     private void updateGame() {
-        //TODO: Debug busywait
         while (!clientList.isAllPlayersUpdated()){} // Block until server receives update from all players
 
         // Updating player movement
@@ -119,15 +118,15 @@ public class GameController extends JComponent{
         //TODO: Update food location if food is eaten, you can use setRandomFoodPosition()
 
         // Setting isClientUpdated back to false to prepare for next update session
-        for (int i=0; i<Def.NUM_OF_PLAYERS; i++){
+        for (int i = 0; i < Def.NUM_OF_PLAYERS; i++){
             clientList.setClientUpdated(i,false);
         }
     }
 
     public String generateGameStateString(int playerID) {
-        if (isGameRunning==false) {
-            if (playerID==winningPlayerID){
-                return "W";
+        if (!isGameRunning) {
+            if (playerID == winningPlayerID){
+                return "V";
             }
             else {
                 return "L";

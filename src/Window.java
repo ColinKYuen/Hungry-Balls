@@ -1,4 +1,5 @@
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 // Window will start the game on the client
 public class Window {

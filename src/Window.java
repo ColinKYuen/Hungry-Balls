@@ -22,13 +22,14 @@ public class Window {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
 
-        GameClient component = new GameClient(args[0]);
+        GameClient client = new GameClient(args[0]);
+        GameBoard component = client.getGameBoard();
         frame.add(component);
-        frame.addKeyListener(component);
+        frame.addKeyListener(client);
 
         frame.setVisible(true);
 
-        Boolean isWon = component.start();
+        Boolean isWon = client.start();
 
         frame.setVisible(false);
         frame.dispose();

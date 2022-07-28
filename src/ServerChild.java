@@ -32,12 +32,15 @@ public class ServerChild implements Runnable{
 
             while (true) {
                 String msg = in.readLine();
+                System.out.println(msg);
                 Direction proposedDir = parseDirection(msg);
                 clientList.setClientUpdated(playerID,true);
                 gameController.setPlayerNextDirection(playerID,proposedDir);
 
+                // TODO: Debug here (Busywait loop doesn't finish)
                 while (!clientList.isReadyForNextUpdate()){} // Block while not ready for next update
                 String gameStateString = gameController.generateGameStateString(playerID);
+                System.out.println(gameStateString);
                 out.println(gameStateString);
                 if (gameStateString.equals("W") || gameStateString.equals("L")) {
                     out.close();

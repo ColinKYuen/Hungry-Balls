@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ClientList {
@@ -6,23 +5,23 @@ public class ClientList {
     // Key: The player ID
     // Value: True if the client has sent the player input to the server, false otherwise
     private ConcurrentHashMap<Integer,Boolean> clientUpdatedMap;
-    private int playerIDCounter;
+    private int clientCounter;
 
     public ClientList (){
         clientUpdatedMap = new ConcurrentHashMap<>();
         for (int i=0; i<Def.NUM_OF_PLAYERS;i++) {
             clientUpdatedMap.put(i,false);
         }
-        playerIDCounter = -1;
+        clientCounter = -1;
     }
 
     public synchronized int generatePlayerID() {
-        playerIDCounter++;
-        return playerIDCounter;
+        clientCounter++;
+        return clientCounter%2;
     }
 
     public int getCurrentCount() {
-        return playerIDCounter;
+        return clientCounter;
     }
 
     public void setClientUpdated(int playerID, boolean value){

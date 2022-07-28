@@ -85,6 +85,7 @@ public class GameController extends JComponent{
     }
 
     private void updateGame() {
+        //TODO: Debug busywait
         while (!clientList.isAllPlayersUpdated()){} // Block until server receives update from all players
 
         // Updating player movement
@@ -138,7 +139,7 @@ public class GameController extends JComponent{
                 result = result + Integer.toString(p.getXPos()) + "," + Integer.toString(p.getYPos()) + "," + Integer.toString(p.getScore())+",";
             }
             for (GameEntity f : foods){
-                result = result + Integer.toString(f.getXPos()) + "," + Integer.toString(f.getYPos());
+                result = result + Integer.toString(f.getXPos()) + "," + Integer.toString(f.getYPos()) + ",";
             }
             result = result + Integer.toString(playerID);
             return result;

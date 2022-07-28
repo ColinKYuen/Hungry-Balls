@@ -62,13 +62,30 @@ public class GameClient extends JFrame implements KeyListener {
             // To do in this loop:
             // 1. Send message of player input to the server
                 // If inputDirection is Quit, immediately return false
-            String GameState = in.readLine();
-
+            sendMessage();
             // 2. Wait for a response from the server
+            String initResponse = in.readLine();
             // 3. Parse the response
                 // Check if the response is win or lose, if it is, return true or false
-            // 4. Update the game board according to the response from Server
+            String[] gameStateStrings = initResponse.split(",");
+            if(gameStateStrings.equals("W")){
+                //when a player win a game
+                return TRUE;
+            } else if (gameStateStrings.equals("L")) {
+                //when a player lose a game
+                return FALSE;
+            } else {
+                //the game is still on
+                // 4. Update the game board according to the response from Server
                 // Implement and call the updateGameBoard() function below
+                players.add(new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0));
+                players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,0));
+                foods.add(new GameEntity(Integer.getInteger(gameStateStrings[6]),Integer.getInteger(gameStateStrings[7]),Def.F_COLOR));
+                playerID = Integer.getInteger(gameStateStrings[8]);
+                gameBoard = new GameBoard(players,foods,playerID);
+            }
+
+
         }
     }
 

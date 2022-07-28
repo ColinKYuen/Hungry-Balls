@@ -1,27 +1,39 @@
-import javax.swing.*;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javax.swing.JComponent;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class GameController extends JComponent implements KeyListener {
-    private static GameBoard gameBoard;
+public class GameController extends JComponent{
     private final int FRAMES_PER_SECOND = 2;
     private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
     private boolean isGameRunning= true;
+    private int winningPlayerID = -1;
     private long gameStartTime;
-    private Player controlledPlayer;
-    private Player enemyPlayer;
+    private final ClientList clientList;
+    private List<Player> players = new ArrayList<>();
+    private List<GameEntity> foods = new ArrayList<>();
 
     private void quit() {
         isGameRunning = false;
     }
 
-    public GameController() {
-        gameBoard = new GameBoard();
-        controlledPlayer = gameBoard.getControllablePlayer();
-        enemyPlayer = gameBoard.getEnemyPlayer();
+    public GameController(ClientList clientList) {
+        this.clientList = clientList;
+
+        players.add(new Player(1,1,Def.P1_COLOR,0));
+        players.add(new Player(8,8,Def.P2_COLOR,1));
+
+        int foodYPos;
+        int foodXPos;
+        do {
+            foodXPos = (int) (Math.random() * Def.MAP_SIZE);
+        } while (foodXPos == players.get(0).getXPos() || foodXPos == players.get(1).getXPos());
+
+        do {
+            foodYPos = (int) (Math.random() * Def.MAP_SIZE);
+        } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
+
+        foods.add(new GameEntity(foodXPos,foodYPos,Def.F_COLOR));
 
         // Set Up
         // Add players into a list and send info to game board
@@ -38,7 +50,7 @@ public class GameController extends JComponent implements KeyListener {
         while (isGameRunning) {
             long elapsedTime = getElapsedTime();
             updateGame();
-            repaint();
+//            repaint();
             elapsedTime += FRAME_DURATION;
             long sleepDuration = elapsedTime - getElapsedTime();
             if (sleepDuration >= 0) {
@@ -51,59 +63,21 @@ public class GameController extends JComponent implements KeyListener {
                 System.out.println("Update and repaint took too long");
             }
         }
-
-        // Boolean value to indicate win / lose
-        triggerGameEnd(true);
     }
 
-    /**
-     * Render game board for client
-     * @param g
-     */
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        gameBoard.draw(g2);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_Q:
-            case KeyEvent.VK_ESCAPE:
-                quit();
-                break;
-
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_A:
-                controlledPlayer.setNextDirection(Direction.West);
-                break;
-
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_W:
-                controlledPlayer.setNextDirection(Direction.North);
-                break;
-
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_D:
-                controlledPlayer.setNextDirection(Direction.East);
-                break;
-
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_S:
-                controlledPlayer.setNextDirection(Direction.South);
-                break;
+    public void setPlayerNextDirection(int playerID, Direction direction) {
+        Player player = players.get(playerID);
+        if (isMovementValid(player,direction)){
+            player.setNextDirection(direction);
+        }
+        else {
+            player.setNextDirection(Direction.Stop);
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
+    private boolean isMovementValid (Player player, Direction direction) {
+        // TODO: Validate movement here (With regards to concurrency)
+        return true;
     }
 
     private long getElapsedTime() {
@@ -111,42 +85,77 @@ public class GameController extends JComponent implements KeyListener {
     }
 
     private void updateGame() {
-        // TODO: Update game here
-        // Later, all update game does is send and receive answer from server, and update game state according to server's answer
+        while (!clientList.isAllPlayersUpdated()){} // Block until server receives update from all players
 
-        debugMovement();
-    }
+        // Updating player movement
+        for (Player p : players){
+            switch (p.getNextDirection()) {
+                case North:
+                    p.setYPos(p.getYPos() - 1);
+                    break;
 
-    // To debug movement, delete this once we have server implementation
-    private void debugMovement() {
-        switch (controlledPlayer.getNextDirection()) {
-            case North:
-                controlledPlayer.setYPos(controlledPlayer.getYPos() - 1);
-                break;
+                case South:
+                    p.setYPos(p.getYPos() + 1);
+                    break;
 
-            case South:
-                controlledPlayer.setYPos(controlledPlayer.getYPos() + 1);
-                break;
+                case East:
+                    p.setXPos(p.getXPos() + 1);
+                    break;
 
-            case East:
-                controlledPlayer.setXPos(controlledPlayer.getXPos() + 1);
-                break;
+                case West:
+                    p.setXPos(p.getXPos() - 1);
+                    break;
 
-            case West:
-                controlledPlayer.setXPos(controlledPlayer.getXPos() - 1);
-                break;
+                case Quit:
+                    isGameRunning = false;
+                    winningPlayerID = p.getPlayerID()==0? 1 : 0;
+                    return;
+            }
+        }
+
+        //TODO: Update score
+        //TODO: If score == 5, end game by setting isGameRunning = false and winningPlayerID = *insert playerID*
+        //TODO: Update food location if food is eaten, you can use setRandomFoodPosition()
+
+        // Setting isClientUpdated back to false to prepare for next update session
+        for (int i=0; i<Def.NUM_OF_PLAYERS; i++){
+            clientList.setClientUpdated(i,false);
         }
     }
 
-    private void triggerGameEnd(boolean isWinner) {
-        final JFrame frame = new JFrame("Results");
-        final String result;
-        if (isWinner) {
-            result = "Congrats, you won!";
-        } else {
-            result = "You lost. Better luck next time.";
+    public String generateGameStateString(int playerID) {
+        if (isGameRunning==false) {
+            if (playerID==winningPlayerID){
+                return "W";
+            }
+            else {
+                return "L";
+            }
         }
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
+        else {
+            String result = "";
+            for (Player p : players){
+                result = result + Integer.toString(p.getXPos()) + "," + Integer.toString(p.getYPos()) + "," + Integer.toString(p.getScore())+",";
+            }
+            for (GameEntity f : foods){
+                result = result + Integer.toString(f.getXPos()) + "," + Integer.toString(f.getYPos());
+            }
+            return result;
+        }
+    }
+
+    private void setRandomFoodPosition (GameEntity food) {
+        int foodYPos;
+        int foodXPos;
+        do {
+            foodXPos = (int) (Math.random() * Def.MAP_SIZE);
+        } while (foodXPos == players.get(0).getXPos() || foodXPos == players.get(1).getXPos());
+
+        do {
+            foodYPos = (int) (Math.random() * Def.MAP_SIZE);
+        } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
+
+        food.setXPos(foodXPos);
+        food.setYPos(foodYPos);
     }
 }

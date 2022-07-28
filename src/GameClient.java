@@ -1,7 +1,3 @@
-//import javax.swing.JComponent;
-//import java.awt.Graphics2D;
-//import java.awt.Graphics;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
@@ -11,8 +7,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
-//commented out some import that are not used right now but may need it later
 
 public class GameClient implements KeyListener {
     private static int PORT = 3000; //hard code the port number

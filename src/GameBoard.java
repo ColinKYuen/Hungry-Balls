@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class GameBoard extends JComponent {
-    private final ReentrantLock[][] map = new ReentrantLock[Def.MAP_SIZE][Def.MAP_SIZE];
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
     private final List<GameEntity> foods = new ArrayList();
     private final List<Player> players = new ArrayList<>();
@@ -17,7 +16,6 @@ public class GameBoard extends JComponent {
         // Initialize Game Board
         for (int i = 0; i < Def.MAP_SIZE; i++) {
             for (int j = 0; j < Def.MAP_SIZE; j++) {
-                map[i][j] = new ReentrantLock();
                 board[i][j] = new GameEntity(i, j, new Color(0, 0, 0));
             }
         }

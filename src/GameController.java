@@ -1,9 +1,10 @@
 import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 
-public class GameController extends JComponent{
+public class GameController extends JComponent {
     private final int FRAMES_PER_SECOND = 2;
     private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
     private boolean isGameRunning= true;

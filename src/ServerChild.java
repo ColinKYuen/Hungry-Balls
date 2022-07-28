@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ServerChild implements Runnable{
+public class ServerChild implements Runnable {
     private final Socket client;
     private final int playerID;
     private final GameController gameController;

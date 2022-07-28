@@ -48,6 +48,17 @@ public class GameBoard extends JComponent {
         return enemyPlayer;
     }
 
+    public String getStringOfFoodPosition() {
+        GameEntity food = foods.get(0);
+        int xPos = food.getXPos();
+        int yPos = food.getYPos();
+        return Integer.toString(xPos) + "," + Integer.toString(yPos);
+    }
+
+    public void changeFoodPosition () {
+        // TODO: Implement random function here. Remember to exclude the current positions of the either players as the new position
+    }
+
     /**
      * Render game board for client
      * @param g

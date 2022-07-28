@@ -78,11 +78,15 @@ public class GameClient extends JFrame implements KeyListener {
                 //the game is still on
                 // 4. Update the game board according to the response from Server
                 // Implement and call the updateGameBoard() function below
+                List<Player> players = new ArrayList<>();
                 players.add(new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0));
                 players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,0));
+                List<GameEntity> foods = new ArrayList<>();
                 foods.add(new GameEntity(Integer.getInteger(gameStateStrings[6]),Integer.getInteger(gameStateStrings[7]),Def.F_COLOR));
                 playerID = Integer.getInteger(gameStateStrings[8]);
                 gameBoard = new GameBoard(players,foods,playerID);
+                gameBoard.updateEntities(players,foods);
+
             }
 
 

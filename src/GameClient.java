@@ -10,16 +10,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 //commented out some import that are not used right now but may need it later
 
-// TODO: Make the client loop and call gameBoard.draw to redraw the board
 public class GameClient extends JFrame implements KeyListener {
-    private boolean isGameRunning= true;
     private static int PORT = 3000; //hard code the port number
+    private boolean isGameRunning;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    private int playerID;
 
     private GameBoard gameBoard;
     private Player controllablePlayer;
@@ -27,31 +29,52 @@ public class GameClient extends JFrame implements KeyListener {
 
 
     public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
-        // TODO: Initialize the game
-        try {
-            socket = new Socket(serverAddress,PORT);
-            //init function;
-            while (true){
-                setPosition(socket);
-                sendMessage();
-            }
-        } finally {
-            System.out.println("closing socket");
-            socket.close();
-        }
+        socket = new Socket(serverAddress,PORT);
+        in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(),true);
+        //init function;
+//            while (true){
+//                setPosition(socket);
+//                sendMessage();
+//            }
+        out.println("00"); // First, send initializing message
+        String initResponse = in.readLine();
+        String[] gameStateStrings = initResponse.split(",");
+        List<Player> players = new ArrayList<>();
+        players.add(new Player(Integer.getInteger(gameStateStrings[0]),Integer.getInteger(gameStateStrings[1]),Def.P1_COLOR,0));
+        players.add(new Player(Integer.getInteger(gameStateStrings[3]),Integer.getInteger(gameStateStrings[4]),Def.P1_COLOR,0));
+        List<GameEntity> foods = new ArrayList<>();
+        foods.add(new GameEntity(Integer.getInteger(gameStateStrings[6]),Integer.getInteger(gameStateStrings[7]),Def.F_COLOR));
+        playerID = Integer.getInteger(gameStateStrings[8]);
+        gameBoard = new GameBoard(players,foods,playerID);
+//        } finally {
+//            System.out.println("closing socket");
+//            socket.close();
+//        }
 
     }
 
     // Returns the win/lose state
-    public Boolean start() {
+    public Boolean start() throws IOException {
         // TODO: Make a loop of rendering the gameBoard and sending the direction
+        // TODO: Make sure to return true if won and false if lost. We'll know if it won or lost if the string is "W" or "L"
+        while (isGameRunning) {
+            // To do in this loop:
+            // 1. Send message of player input to the server
+                // If inputDirection is Quit, immediately return false
+            String GameState = in.readLine();
+
+            // 2. Wait for a response from the server
+            // 3. Parse the response
+                // Check if the response is win or lose, if it is, return true or false
+            // 4. Update the game board according to the response from Server
+                // Implement and call the updateGameBoard() function below
+        }
     }
 
     private void setPosition(Socket socket) { //set position function for the player
         this.socket = socket;
         try {
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(),true);
             while (true) {
                 String GameState = in.readLine();
                 //more below to get the move and move the player
@@ -63,7 +86,8 @@ public class GameClient extends JFrame implements KeyListener {
                 String score1 = Character.toString(GameState.charAt(4));        //s1 [4]
                 String Location2 = GameState.substring(6, 9);    //x2,y2 [6 to 8]
                 String score2 = Character.toString(GameState.charAt(10));      //s2 [10]
-                //listen to the move and then send to the server side
+                // Update Game Board using gameBoard.updateEntities
+                // listen to the move and then send to the server side
                 sendMessage();
 
             }
@@ -95,7 +119,6 @@ public class GameClient extends JFrame implements KeyListener {
     }
 
     public void sendMessage() {
-        //TODO: Finish this
         //direction depends on the key pressed[keypressed are in game controller part]
         //direction will come from keylistener or keybinding
         //then direction get convert into a message to be sent to the server side
@@ -104,10 +127,8 @@ public class GameClient extends JFrame implements KeyListener {
         out.println(message);
     }
 
-    public void parseGameState() {
-        // TODO: Parse game state, remember to also parse if it wins or loses
-        //parse in setPosition()
-
+    private void updateGameBoard(String[] gameStateString){
+        // TODO: Update the game board here
     }
 
     private void quit() {

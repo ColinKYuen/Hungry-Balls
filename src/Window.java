@@ -2,6 +2,18 @@ import javax.swing.*;
 
 // Window will start the game on the client
 public class Window {
+    private static void triggerGameEnd(boolean isWinner) {
+        final JFrame frame = new JFrame("Results");
+        final String result;
+        if (isWinner) {
+            result = "Congrats, you won!";
+        } else {
+            result = "You lost. Better luck next time.";
+        }
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
+    }
+
     public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame();
 
@@ -20,19 +32,7 @@ public class Window {
 
         frame.setVisible(false);
         frame.dispose();
-    }
-
-
-    private void triggerGameEnd(boolean isWinner) {
-        final JFrame frame = new JFrame("Results");
-        final String result;
-        if (isWinner) {
-            result = "Congrats, you won!";
-        } else {
-            result = "You lost. Better luck next time.";
-        }
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
+        triggerGameEnd(isWon);
     }
 
 }

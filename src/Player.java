@@ -5,7 +5,7 @@ public class Player extends GameEntity {
     private int score = 0;
     private Direction nextDirection = Direction.Stop;
 
-    public Player(int xPos, int yPos, Color colour,int playerID) {
+    public Player(int xPos, int yPos, Color colour, int playerID) {
         super(xPos, yPos, colour);
         this.playerID = playerID;
     }

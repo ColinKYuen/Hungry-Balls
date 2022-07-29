@@ -20,8 +20,7 @@ public class GameClient implements KeyListener {
     private Direction inputDirection = Direction.Stop;
 
 
-    public GameClient(String serverAddress, int serverPort) throws Exception { //serverAddress = IP(hard code too)
-        System.out.println(serverAddress + ":" + serverPort);
+    public GameClient(String serverAddress, int serverPort) throws Exception {
         socket = new Socket(serverAddress, serverPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(),true);
@@ -44,7 +43,7 @@ public class GameClient implements KeyListener {
     }
 
     // Returns the win/lose state
-    public Boolean start() throws IOException {
+    public boolean start() throws IOException {
         // TODO: Make a loop of rendering the gameBoard and sending the direction
         // TODO: Make sure to return true if won and false if lost. We'll know if it won or lost if the string is "W" or "L"
         while (isGameRunning) {

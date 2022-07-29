@@ -2,8 +2,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.io.IOException;
 
-// Window will start the game on the client
-public class Window {
+// Launcher will start the game on the client
+public class Launcher {
     private static String host;
     private static int port;
     private static GameServer server;
@@ -32,7 +32,6 @@ public class Window {
             client = new GameClient("127.0.0.1", port);
         } else {
             client = new GameClient(host, port);
-            System.out.println("Client");
         }
     }
 
@@ -50,7 +49,7 @@ public class Window {
     }
 
     private static void startGame() throws IOException {
-        Boolean isWon = client.start();
+        boolean isWon = client.start();
         triggerGameEnd(isWon);
         frame.setVisible(false);
         frame.dispose();

@@ -5,12 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class GameServer{
-
-    public GameServer() throws IOException, InterruptedException {
-        this(3000);
-    }
-
+public class GameServer {
     public GameServer(int port) throws IOException, InterruptedException {
         ServerSocket listener = new ServerSocket(port);
         ClientList clientList = new ClientList();

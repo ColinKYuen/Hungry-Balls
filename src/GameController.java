@@ -116,15 +116,15 @@ public class GameController extends JComponent {
         //TODO: Update food location if food is eaten, you can use setRandomFoodPosition()
         //TODO: If score == 5, end game by setting isGameRunning = false and winningPlayerID = *insert playerID*
         for(Player p : players) {
-            if(p.getScore() == 5) {
-                isGameRunning = false;
-                winningPlayerID = p.getPlayerID()==0? 1 : 0;
-            }
-            for(GameEntity f : foods) {
-                if(p.getXPos() == f.getXPos() && p.getYPos() == f.getYPos()) {
+            for (GameEntity f : foods) {
+                if (p.getXPos() == f.getXPos() && p.getYPos() == f.getYPos()) {
                     setRandomFoodPosition(f);
-                    p.setScore(p.getScore()+1);
+                    p.setScore(p.getScore() + 1);
                 }
+            }
+            if (p.getScore() == 5) {
+                isGameRunning = false;
+                winningPlayerID = p.getPlayerID(); // Needs review
             }
         }
         

@@ -21,8 +21,8 @@ public class GameController extends JComponent {
     public GameController(ClientList clientList) {
         this.clientList = clientList;
 
-        players.add(new Player(Def.P1_X_INITIAL_POS,Def.P1_Y_INITIAL_POS,Def.P1_COLOR,0));
-        players.add(new Player(Def.P2_X_INITIAL_POS,Def.P2_Y_INITIAL_POS,Def.P2_COLOR,1));
+        players.add(new Player(Def.P1_X_INITIAL_POS, Def.P1_Y_INITIAL_POS, Def.P1_COLOR, 0));
+        players.add(new Player(Def.P2_X_INITIAL_POS, Def.P2_Y_INITIAL_POS, Def.P2_COLOR, 1));
 
         int foodYPos;
         int foodXPos;
@@ -51,7 +51,6 @@ public class GameController extends JComponent {
         while (isGameRunning) {
             long elapsedTime = getElapsedTime();
             updateGame();
-//            repaint();
             elapsedTime += FRAME_DURATION;
             long sleepDuration = elapsedTime - getElapsedTime();
             if (sleepDuration >= 0) {
@@ -68,7 +67,7 @@ public class GameController extends JComponent {
 
     public void setPlayerNextDirection(int playerID, Direction direction) {
         Player player = players.get(playerID);
-        if (isMovementValid(player,direction)){
+        if (isMovementValid(player,direction)) {
             player.setNextDirection(direction);
         }
         else {
@@ -86,7 +85,7 @@ public class GameController extends JComponent {
     }
 
     private void updateGame() {
-        while (!clientList.isAllPlayersUpdated()){} // Block until server receives update from all players
+        while (!clientList.isAllPlayersUpdated()) {} // Block until server receives update from all players
 
         // Updating player movement
         for (Player p : players){
@@ -119,14 +118,14 @@ public class GameController extends JComponent {
         //TODO: Update food location if food is eaten, you can use setRandomFoodPosition()
 
         // Setting isClientUpdated back to false to prepare for next update session
-        for (int i = 0; i < Def.NUM_OF_PLAYERS; i++){
+        for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
             clientList.setClientUpdated(i,false);
         }
     }
 
     public String generateGameStateString(int playerID) {
         if (!isGameRunning) {
-            if (playerID == winningPlayerID){
+            if (playerID == winningPlayerID) {
                 return "V";
             }
             else {
@@ -135,10 +134,10 @@ public class GameController extends JComponent {
         }
         else {
             String result = "";
-            for (Player p : players){
-                result = result + Integer.toString(p.getXPos()) + "," + Integer.toString(p.getYPos()) + "," + Integer.toString(p.getScore())+",";
+            for (Player p : players) {
+                result = result + Integer.toString(p.getXPos()) + "," + Integer.toString(p.getYPos()) + "," + Integer.toString(p.getScore()) + ",";
             }
-            for (GameEntity f : foods){
+            for (GameEntity f : foods) {
                 result = result + Integer.toString(f.getXPos()) + "," + Integer.toString(f.getYPos()) + ",";
             }
             result = result + Integer.toString(playerID);

@@ -29,7 +29,7 @@ public class ServerChild implements Runnable {
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
 
             String initMsg = in.readLine(); // We assume that the first message is "00"
-            if (initMsg.equals("00")){
+            if (initMsg.equals("00")) {
                 String initResponse = gameController.generateGameStateString(playerID);
                 out.println(initResponse);
             }
@@ -38,8 +38,8 @@ public class ServerChild implements Runnable {
                 String msg = in.readLine();
                 System.out.println(msg);
                 Direction proposedDir = parseDirection(msg);
-                clientList.setClientUpdated(playerID,true);
-                gameController.setPlayerNextDirection(playerID,proposedDir);
+                clientList.setClientUpdated(playerID, true);
+                gameController.setPlayerNextDirection(playerID, proposedDir);
 
                 while (!clientList.isReadyForNextUpdate()){} // Block while not ready for next update
                 String gameStateString = gameController.generateGameStateString(playerID);
@@ -68,12 +68,10 @@ public class ServerChild implements Runnable {
                 return Direction.East;
             case "W":
                 return Direction.West;
-            case "T":
-                return Direction.Stop;
             case "Q":
                 return Direction.Quit;
             default:
-                return null;
+                return Direction.Stop;
         }
     }
 

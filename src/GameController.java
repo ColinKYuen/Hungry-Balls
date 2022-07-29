@@ -76,6 +76,30 @@ public class GameController extends JComponent {
 
     private boolean isMovementValid (Player player, Direction direction) {
         // TODO: Validate movement here (With regards to concurrency)
+        for(Player p : players) {
+            if(player.getPlayerID() != p.getPlayerID()) {
+                switch (direction) {
+                    case North:
+                        if(player.getXPos() == p.getXPos() && player.getYPos() - 1 == p.getYPos()) {
+                            return false;
+                        }
+    
+                    case South:
+                        if(player.getXPos() == p.getXPos() && player.getYPos() + 1 == p.getYPos()) {
+                            return false;
+                        }
+    
+                    case East:
+                        if(player.getXPos() + 1 == p.getXPos() && player.getYPos() == p.getYPos()) {
+                            return false;
+                        }
+                    case West:
+                        if(player.getXPos() - 1 == p.getXPos() && player.getYPos() == p.getYPos()) {
+                            return false;
+                        }
+                }
+            }
+        }
         return true;
     }
 

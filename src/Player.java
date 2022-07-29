@@ -1,11 +1,13 @@
 import java.awt.Color;
 
 public class Player extends GameEntity {
+    private final int playerID;
     private int score = 0;
     private Direction nextDirection = Direction.Stop;
 
-    public Player(int xPos, int yPos, Color colour) {
+    public Player(int xPos, int yPos, Color colour, int playerID) {
         super(xPos, yPos, colour);
+        this.playerID = playerID;
     }
 
     public int getScore() {
@@ -22,5 +24,9 @@ public class Player extends GameEntity {
 
     public void setNextDirection(Direction direction) {
         nextDirection = direction;
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
 }

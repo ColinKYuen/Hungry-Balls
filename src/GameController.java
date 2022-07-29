@@ -122,9 +122,9 @@ public class GameController extends JComponent {
                     p.setScore(p.getScore() + 1);
                 }
             }
-            if (p.getScore() == 5) {
+            if (p.getScore() == Def.WINNING_SCORE) {
                 isGameRunning = false;
-                winningPlayerID = p.getPlayerID(); // Needs review
+                winningPlayerID = p.getPlayerID();
             }
         }
         

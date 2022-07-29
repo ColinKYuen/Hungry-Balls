@@ -9,20 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameClient implements KeyListener {
-    private static int PORT = 3000; //hard code the port number
     private boolean isGameRunning = true;
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private final Socket socket;
+    private final BufferedReader in;
+    private final PrintWriter out;
     private int playerID;
 
-    private GameBoard gameBoard;
+    private final GameBoard gameBoard;
     private Player controllablePlayer;
     private Direction inputDirection = Direction.Stop;
 
 
-    public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
-        socket = new Socket(serverAddress,PORT);
+    public GameClient(String serverAddress, int serverPort) throws Exception { //serverAddress = IP(hard code too)
+        System.out.println(serverAddress + ":" + serverPort);
+        socket = new Socket(serverAddress, serverPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(),true);
         out.println("00"); // First, send initializing message
@@ -41,7 +41,6 @@ public class GameClient implements KeyListener {
                 Def.F_COLOR));
         playerID = Integer.parseInt(gameStateStrings[8]);
         gameBoard = new GameBoard(players,foods,playerID);
-
     }
 
     // Returns the win/lose state

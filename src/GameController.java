@@ -77,9 +77,7 @@ public class GameController extends JComponent {
     public void setPlayerNextDirection(int playerID, Direction direction) throws InterruptedException {
         Player player = players.get(playerID);
         if (isMovementValid(player,direction)) {
-            cells[player.getXPos()][player.getYPos()].unlock();
             player.setNextDirection(direction);
-            cells[player.getXPos()][player.getYPos()].lock();
         }
         else {
             player.setNextDirection(Direction.Stop);
@@ -91,26 +89,38 @@ public class GameController extends JComponent {
         int y = player.getYPos();
         ReentrantLock cell;
         switch (direction){
-//            case North:
-//                return cells[x][y - 1].tryLock(0, TimeUnit.SECONDS);
-//            case South:
-//                return cells[x][y + 1].tryLock(0, TimeUnit.SECONDS);
-//            case East:
-//                return cells[x + 1][y].tryLock(0, TimeUnit.SECONDS);
-//            case West:
-//                return cells[x - 1][y].tryLock(0, TimeUnit.SECONDS);
             case North:
-                cell = cells[x][y - 1];
-                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+                if(y > 0){
+                    cell = cells[x][y - 1];
+                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
+                        cell.lock();
+                        return true;
+                    }
+                }
             case South:
-                cell = cells[x][y + 1];
-                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+                if(y < Def.MAP_SIZE - 1){
+                    cell = cells[x][y + 1];
+                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
+                        cell.lock();
+                        return true;
+                    }
+                }
             case East:
-                cell = cells[x + 1][y];
-                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+                if(x < Def.MAP_SIZE - 1){
+                    cell = cells[x + 1][y];
+                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
+                        cell.lock();
+                        return true;
+                    }
+                }
             case West:
-                cell = cells[x - 1][y];
-                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+                if(x > 0){
+                    cell = cells[x - 1][y];
+                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
+                        cell.lock();
+                        return true;
+                    }
+                }
             case Quit:
                 return true;
         }
@@ -148,6 +158,7 @@ public class GameController extends JComponent {
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
                     return;
             }
+            cells[p.getXPos()][p.getYPos()].unlock();
         }
 
         //TODO: Update score

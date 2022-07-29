@@ -21,6 +21,11 @@ public class GameController extends JComponent {
     }
 
     public GameController(ClientList clientList) {
+        for(ReentrantLock[] col : cells){
+            for(ReentrantLock cell : col){
+                cell = new ReentrantLock();
+            }
+        }
         this.clientList = clientList;
 
         players.add(new Player(Def.P1_X_INITIAL_POS, Def.P1_Y_INITIAL_POS, Def.P1_COLOR, 0));
@@ -119,7 +124,8 @@ public class GameController extends JComponent {
 
         // Updating player movement
         for (Player p : players){
-            unlockCells(p.getXPos(), p.getYPos());
+
+            cells[p.getXPos()][p.getYPos()].unlock();
             switch (p.getNextDirection()) {
                 case North:
                     p.setYPos(p.getYPos() - 1);
@@ -142,7 +148,7 @@ public class GameController extends JComponent {
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
                     return;
             }
-            lockCells(p.getXPos(), p.getYPos());
+            cells[p.getXPos()][p.getYPos()].lock();
         }
 
         //TODO: Update score
@@ -153,14 +159,6 @@ public class GameController extends JComponent {
         for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
             clientList.setClientUpdated(i,false);
         }
-    }
-
-    private void lockCells(int x, int y){
-        cells[x][y].lock();
-    }
-
-    private void unlockCells(int x, int y){
-        cells[x][y].unlock();
     }
 
     public String generateGameStateString(int playerID) {

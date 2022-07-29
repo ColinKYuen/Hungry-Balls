@@ -1,6 +1,7 @@
 import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class GameController extends JComponent {
@@ -12,6 +13,7 @@ public class GameController extends JComponent {
     private final ClientList clientList;
     private List<Player> players = new ArrayList<>();
     private List<GameEntity> foods = new ArrayList<>();
+    private ReentrantLock[][] cells = new ReentrantLock[Def.MAP_SIZE][Def.MAP_SIZE];
 
     private void quit() {
         isGameRunning = false;
@@ -34,6 +36,8 @@ public class GameController extends JComponent {
         } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
 
         foods.add(new GameEntity(foodXPos,foodYPos,Def.F_COLOR));
+
+
 
         // Set Up
         // Add players into a list and send info to game board
@@ -120,6 +124,11 @@ public class GameController extends JComponent {
         for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
             clientList.setClientUpdated(i,false);
         }
+    }
+
+    private void updateLocks(int old_x, int old_y, int new_x, int new_y){
+        cells[old_x][old_y].unlock();
+        cells[new_x][new_y].lock();
     }
 
     public String generateGameStateString(int playerID) {

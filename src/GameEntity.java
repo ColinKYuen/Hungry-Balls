@@ -34,7 +34,6 @@ public class GameEntity {
     public void setColour(Color colour) {
         this.colour = colour;
     }
-
     // Getters
     public int getXPos() {
         return xPos;

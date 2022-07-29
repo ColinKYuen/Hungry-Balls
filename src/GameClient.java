@@ -118,7 +118,7 @@ public class GameClient implements KeyListener {
         //direction depends on the key pressed[keypressed are in game controller part]
         //direction will come from keylistener or keybinding
         //then direction get convert into a message to be sent to the server side
-        Direction dir=inputDirection;
+        Direction dir = inputDirection;
         String message = createMsg(dir);
         out.println(message);
     }

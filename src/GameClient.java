@@ -19,6 +19,9 @@ public class GameClient implements KeyListener {
     private Player controllablePlayer;
     private Direction inputDirection = Direction.Stop;
 
+    public GameClient(int serverPort) throws Exception {
+        this("localhost", serverPort);
+    }
 
     public GameClient(String serverAddress, int serverPort) throws Exception {
         socket = new Socket(serverAddress, serverPort);

@@ -29,7 +29,7 @@ public class Launcher {
                     System.exit(1);
                 }
             }).start();
-            client = new GameClient("127.0.0.1", port);
+            client = new GameClient(port);
         } else {
             client = new GameClient(host, port);
         }

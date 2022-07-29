@@ -1,6 +1,7 @@
 import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 
@@ -68,7 +69,7 @@ public class GameController extends JComponent {
         }
     }
 
-    public void setPlayerNextDirection(int playerID, Direction direction) {
+    public void setPlayerNextDirection(int playerID, Direction direction) throws InterruptedException {
         Player player = players.get(playerID);
         if (isMovementValid(player,direction)) {
             player.setNextDirection(direction);
@@ -78,9 +79,35 @@ public class GameController extends JComponent {
         }
     }
 
-    private boolean isMovementValid (Player player, Direction direction) {
-        // TODO: Validate movement here (With regards to concurrency)
-        return true;
+    private boolean isMovementValid (Player player, Direction direction) throws InterruptedException {
+        int x = player.getXPos();
+        int y = player.getYPos();
+        ReentrantLock cell;
+        switch (direction){
+//            case North:
+//                return cells[x][y - 1].tryLock(0, TimeUnit.SECONDS);
+//            case South:
+//                return cells[x][y + 1].tryLock(0, TimeUnit.SECONDS);
+//            case East:
+//                return cells[x + 1][y].tryLock(0, TimeUnit.SECONDS);
+//            case West:
+//                return cells[x - 1][y].tryLock(0, TimeUnit.SECONDS);
+            case North:
+                cell = cells[x][y - 1];
+                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+            case South:
+                cell = cells[x][y + 1];
+                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+            case East:
+                cell = cells[x + 1][y];
+                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+            case West:
+                cell = cells[x - 1][y];
+                return cell.isHeldByCurrentThread() || cell.getHoldCount() < 1;
+            case Quit:
+                return true;
+        }
+        return false;
     }
 
     private long getElapsedTime() {
@@ -92,6 +119,7 @@ public class GameController extends JComponent {
 
         // Updating player movement
         for (Player p : players){
+            unlockCells(p.getXPos(), p.getYPos());
             switch (p.getNextDirection()) {
                 case North:
                     p.setYPos(p.getYPos() - 1);
@@ -114,6 +142,7 @@ public class GameController extends JComponent {
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
                     return;
             }
+            lockCells(p.getXPos(), p.getYPos());
         }
 
         //TODO: Update score
@@ -126,9 +155,12 @@ public class GameController extends JComponent {
         }
     }
 
-    private void updateLocks(int old_x, int old_y, int new_x, int new_y){
-        cells[old_x][old_y].unlock();
-        cells[new_x][new_y].lock();
+    private void lockCells(int x, int y){
+        cells[x][y].lock();
+    }
+
+    private void unlockCells(int x, int y){
+        cells[x][y].unlock();
     }
 
     public String generateGameStateString(int playerID) {

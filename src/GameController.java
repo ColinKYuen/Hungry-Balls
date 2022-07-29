@@ -1,7 +1,6 @@
 import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 public class GameController extends JComponent {

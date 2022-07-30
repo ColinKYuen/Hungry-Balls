@@ -10,14 +10,12 @@ import java.util.List;
 
 public class GameClient implements KeyListener {
     private static int PORT = 3000; //hard code the port number
-    private boolean isGameRunning = true;
     private Socket socket;
     private BufferedReader in;
     private PrintWriter out;
     private int playerID;
 
     private GameBoard gameBoard;
-    private Player controllablePlayer;
     private Direction inputDirection = Direction.Stop;
 
 
@@ -48,7 +46,7 @@ public class GameClient implements KeyListener {
     public Boolean start() throws IOException {
         // TODO: Make a loop of rendering the gameBoard and sending the direction
         // TODO: Make sure to return true if won and false if lost. We'll know if it won or lost if the string is "W" or "L"
-        while (isGameRunning) {
+        while (true) {
             // To do in this loop:
             // 1. Send message of player input to the server
             sendMessage();
@@ -88,7 +86,6 @@ public class GameClient implements KeyListener {
                 gameBoard.updateEntities(players,foods);
             }
         }
-        return false;
     }
 
     public GameBoard getGameBoard() {
@@ -123,36 +120,32 @@ public class GameClient implements KeyListener {
         out.println(message);
     }
 
-    private void quit() {
-        isGameRunning = false;
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_Q:
             case KeyEvent.VK_ESCAPE:
-                quit();
+                inputDirection = Direction.Quit;
                 break;
 
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A:
-                inputDirection=Direction.West;
+                inputDirection = Direction.West;
                 break;
 
             case KeyEvent.VK_UP:
             case KeyEvent.VK_W:
-                inputDirection= Direction.North;
+                inputDirection = Direction.North;
                 break;
 
             case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D:
-                inputDirection= Direction.East;
+                inputDirection = Direction.East;
                 break;
 
             case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S:
-                inputDirection= Direction.South;
+                inputDirection = Direction.South;
                 break;
         }
     }

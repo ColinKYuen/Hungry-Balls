@@ -108,7 +108,6 @@ public class GameController extends JComponent {
                 case Quit:
                     isGameRunning = false;
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
-                    return;
             }
         }
 

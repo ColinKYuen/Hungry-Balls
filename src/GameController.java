@@ -85,8 +85,8 @@ public class GameController extends JComponent {
     }
 
     private boolean isMovementValid (Player player, Direction direction) throws InterruptedException {
-        int x = player.getXPos();
-        int y = player.getYPos();
+        final int x = player.getXPos();
+        final int y = player.getYPos();
         ReentrantLock cell;
         switch (direction){
             case North:
@@ -136,6 +136,8 @@ public class GameController extends JComponent {
 
         // Updating player movement
         for (Player p : players){
+            final int x = p.getXPos();
+            final int y = p.getYPos();
             switch (p.getNextDirection()) {
                 case North:
                     p.setYPos(p.getYPos() - 1);
@@ -158,7 +160,10 @@ public class GameController extends JComponent {
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
                     return;
             }
-            cells[p.getXPos()][p.getYPos()].unlock();
+            if(x != p.getXPos() || y != p.getYPos()){
+                cells[p.getXPos()][p.getYPos()].unlock();
+            }
+
         }
 
         //TODO: Update score

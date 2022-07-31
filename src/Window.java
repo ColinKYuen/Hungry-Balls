@@ -1,5 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 // Window will start the game on the client
 public class Window {
@@ -28,6 +30,14 @@ public class Window {
         GameBoard component = client.getGameBoard();
         frame.add(component);
         frame.addKeyListener(client);
+        frame.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        client.triggerQuit();
+                    }
+                }
+        );
 
         frame.setVisible(true);
 

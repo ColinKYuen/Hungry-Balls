@@ -89,7 +89,7 @@ public class GameClient implements KeyListener {
     }
 
     public void triggerQuit() {
-        inputDirection=Direction.Quit;
+        inputDirection = Direction.Quit;
     }
 
     public GameBoard getGameBoard() {

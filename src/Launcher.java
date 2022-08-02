@@ -1,5 +1,7 @@
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 // Launcher will start the game on the client
@@ -39,8 +41,16 @@ public class Launcher {
         frame = new JFrame();
         frame.setSize(Def.WIDTH, Def.HEIGHT);
         frame.setTitle("CMPT371 - Group 10");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setResizable(false);
+        frame.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        client.triggerQuit();
+                    }
+                }
+        );
         GameBoard component = client.getGameBoard();
         frame.add(component);
         frame.addKeyListener(client);
@@ -86,7 +96,8 @@ public class Launcher {
         } else {
             result = "You lost. Better luck next time.";
         }
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         JOptionPane.showMessageDialog(frame, result, "Game Results", JOptionPane.INFORMATION_MESSAGE);
+        frame.dispose();
     }
 }

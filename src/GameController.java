@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public class GameController extends JComponent {
-    private final int FRAMES_PER_SECOND = 2;
+    private final int FRAMES_PER_SECOND = 8;
     private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
     private boolean isGameRunning= true;
     private int winningPlayerID = -1;

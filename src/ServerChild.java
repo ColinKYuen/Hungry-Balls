@@ -11,8 +11,6 @@ public class ServerChild implements Runnable {
     private final GameController gameController;
     private final ClientList clientList;
 
-
-
     public ServerChild(Socket socket, GameController gameController, ClientList clientList) {
         this.client= socket;
         this.clientList = clientList;

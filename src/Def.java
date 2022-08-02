@@ -28,4 +28,7 @@ public class Def {
 
     // Food Color (Green)
     final static Color F_COLOR = new Color(0,255,0);
+
+    //Winning score
+    final static int WINNING_SCORE = 5;
 }

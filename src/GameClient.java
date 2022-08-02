@@ -9,18 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameClient implements KeyListener {
-    private static int PORT = 3000; //hard code the port number
-    private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private boolean isGameRunning = true;
+    private final Socket socket;
+    private final BufferedReader in;
+    private final PrintWriter out;
     private int playerID;
 
-    private GameBoard gameBoard;
+    private final GameBoard gameBoard;
+    private Player controllablePlayer;
     private Direction inputDirection = Direction.Stop;
 
+    public GameClient(int serverPort) throws Exception {
+        this("localhost", serverPort);
+    }
 
-    public GameClient(String serverAddress) throws Exception { //serverAddress = IP(hard code too)
-        socket = new Socket(serverAddress,PORT);
+    public GameClient(String serverAddress, int serverPort) throws Exception {
+        socket = new Socket(serverAddress, serverPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(),true);
         out.println("00"); // First, send initializing message
@@ -39,11 +43,10 @@ public class GameClient implements KeyListener {
                 Def.F_COLOR));
         playerID = Integer.parseInt(gameStateStrings[8]);
         gameBoard = new GameBoard(players,foods,playerID);
-
     }
 
     // Returns the win/lose state
-    public Boolean start() throws IOException {
+    public boolean start() throws IOException {
         // TODO: Make a loop of rendering the gameBoard and sending the direction
         // TODO: Make sure to return true if won and false if lost. We'll know if it won or lost if the string is "W" or "L"
         while (true) {

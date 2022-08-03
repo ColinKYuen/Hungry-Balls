@@ -125,6 +125,7 @@ public class GameController extends JComponent {
                         break;
                     case Quit:
                         result = true;
+                        break;
                     default:
                         result = false;
                 }

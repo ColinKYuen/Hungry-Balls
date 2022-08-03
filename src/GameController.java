@@ -1,8 +1,6 @@
 import javax.swing.JComponent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 public class GameController extends JComponent {
@@ -14,18 +12,12 @@ public class GameController extends JComponent {
     private final ClientList clientList;
     private List<Player> players = new ArrayList<>();
     private List<GameEntity> foods = new ArrayList<>();
-    private ReentrantLock[][] cells = new ReentrantLock[Def.MAP_SIZE][Def.MAP_SIZE];
 
     private void quit() {
         isGameRunning = false;
     }
 
     public GameController(ClientList clientList) {
-        for(ReentrantLock[] col : cells){
-            for(ReentrantLock cell : col){
-                cell = new ReentrantLock();
-            }
-        }
         this.clientList = clientList;
 
         players.add(new Player(Def.P1_X_INITIAL_POS, Def.P1_Y_INITIAL_POS, Def.P1_COLOR, 0));
@@ -42,8 +34,6 @@ public class GameController extends JComponent {
         } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
 
         foods.add(new GameEntity(foodXPos,foodYPos,Def.F_COLOR));
-
-
 
         // Set Up
         // Add players into a list and send info to game board
@@ -74,7 +64,7 @@ public class GameController extends JComponent {
         }
     }
 
-    public void setPlayerNextDirection(int playerID, Direction direction) throws InterruptedException {
+    public void setPlayerNextDirection(int playerID, Direction direction) {
         Player player = players.get(playerID);
         if (isMovementValid(player,direction)) {
             player.setNextDirection(direction);
@@ -84,47 +74,9 @@ public class GameController extends JComponent {
         }
     }
 
-    private boolean isMovementValid (Player player, Direction direction) throws InterruptedException {
-        final int x = player.getXPos();
-        final int y = player.getYPos();
-        ReentrantLock cell;
-        switch (direction){
-            case North:
-                if(y > 0){
-                    cell = cells[x][y - 1];
-                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
-                        cell.lock();
-                        return true;
-                    }
-                }
-            case South:
-                if(y < Def.MAP_SIZE - 1){
-                    cell = cells[x][y + 1];
-                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
-                        cell.lock();
-                        return true;
-                    }
-                }
-            case East:
-                if(x < Def.MAP_SIZE - 1){
-                    cell = cells[x + 1][y];
-                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
-                        cell.lock();
-                        return true;
-                    }
-                }
-            case West:
-                if(x > 0){
-                    cell = cells[x - 1][y];
-                    if(cell.isHeldByCurrentThread() || cell.getHoldCount() < 1){
-                        cell.lock();
-                        return true;
-                    }
-                }
-            case Quit:
-                return true;
-        }
-        return false;
+    private boolean isMovementValid (Player player, Direction direction) {
+        // TODO: Validate movement here (With regards to concurrency)
+        return true;
     }
 
     private long getElapsedTime() {
@@ -136,8 +88,6 @@ public class GameController extends JComponent {
 
         // Updating player movement
         for (Player p : players){
-            final int x = p.getXPos();
-            final int y = p.getYPos();
             switch (p.getNextDirection()) {
                 case North:
                     p.setYPos(p.getYPos() - 1);
@@ -159,10 +109,6 @@ public class GameController extends JComponent {
                     isGameRunning = false;
                     winningPlayerID = p.getPlayerID()==0? 1 : 0;
             }
-            if(x != p.getXPos() || y != p.getYPos()){
-                cells[p.getXPos()][p.getYPos()].unlock();
-            }
-
         }
 
         //TODO: Update score

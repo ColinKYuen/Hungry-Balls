@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 public class GameController extends JComponent {
-    private final int FRAMES_PER_SECOND = 1;
+    private final int FRAMES_PER_SECOND = 8;
     private final long FRAME_DURATION = 1000 / FRAMES_PER_SECOND;
     private boolean isGameRunning= true;
     private int winningPlayerID = -1;
@@ -71,13 +71,6 @@ public class GameController extends JComponent {
                 }
             } else {
                 System.out.println("Update and repaint took too long");
-            }
-
-            for (int i = 0; i < Def.MAP_SIZE; i++) {
-                System.out.println("");
-                for (int j = 0; j < Def.MAP_SIZE; j++) {
-                    System.out.print(map[i][j] ? 1 : 0);
-                }
             }
         }
     }
@@ -152,7 +145,7 @@ public class GameController extends JComponent {
         // Updating player movement
         for (Player p : players) {
             final int prevX = p.getXPos();
-            final int prevY = p.getYPos();
+            final int prevY = p.getYPos();t
             try {
                 if (lock.tryLock(500, TimeUnit.MILLISECONDS)) { 
                     switch (p.getNextDirection()) {

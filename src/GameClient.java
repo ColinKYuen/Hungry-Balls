@@ -85,7 +85,6 @@ public class GameClient implements KeyListener {
                 List<GameEntity> foods = new ArrayList<>();
                 foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),Integer.parseInt(gameStateStrings[7]),Def.F_COLOR));
                 playerID = Integer.parseInt(gameStateStrings[8]);
-                System.out.println("about to update entities");
                 gameBoard.updateEntities(players,foods);
             }
         }

@@ -180,7 +180,6 @@ public class GameController extends JComponent {
                     final int newY = p.getYPos();
                     if (newY != prevY || newX != prevX) {
                         map[prevY][prevX] = true;
-                        map[newY][newX] = false;
                     }
                 }
             } catch (Exception e) {

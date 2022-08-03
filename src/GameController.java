@@ -145,7 +145,7 @@ public class GameController extends JComponent {
         // Updating player movement
         for (Player p : players) {
             final int prevX = p.getXPos();
-            final int prevY = p.getYPos();t
+            final int prevY = p.getYPos();
             try {
                 if (lock.tryLock(500, TimeUnit.MILLISECONDS)) { 
                     switch (p.getNextDirection()) {

@@ -4,11 +4,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class GameBoard extends JComponent {
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
-    private final List<GameEntity> foods = new ArrayList();
+    private final List<GameEntity> foods = new ArrayList<>();
     private final List<Player> players = new ArrayList<>();
     private final int playerID;
 
@@ -25,7 +24,7 @@ public class GameBoard extends JComponent {
         this.playerID = playerID;
     }
 
-    public void updateEntities (List<Player> newPlayers, List<GameEntity> newFoods){
+    public void updateEntities(List<Player> newPlayers, List<GameEntity> newFoods) {
         this.players.clear();
         this.players.addAll(newPlayers);
         this.foods.clear();
@@ -35,6 +34,7 @@ public class GameBoard extends JComponent {
 
     /**
      * Render game board for client
+     *
      * @param g
      */
     public void paintComponent(Graphics g) {
@@ -59,11 +59,11 @@ public class GameBoard extends JComponent {
         // Draw the Player & Score
         Player controllablePlayer = players.get(playerID);
         controllablePlayer.fillCircle(g2);
-        g2.drawString("Your Score: " + controllablePlayer.getScore(),0, (int) (1 * Def.G_GAP  / 2));
-        int enemyPlayerID = playerID==0 ? 1:0; // Assumes only 2 players
+        g2.drawString("Your Score: " + controllablePlayer.getScore(), 0, (int) (1 * Def.G_GAP / 2));
+        int enemyPlayerID = playerID == 0 ? 1 : 0; // Assumes only 2 players
         Player enemyPlayer = players.get(enemyPlayerID);
         enemyPlayer.fillCircle(g2);
-        g2.drawString("Opponent Score: " + enemyPlayer.getScore(),0, (int) (3 * Def.G_GAP / 4));
+        g2.drawString("Opponent Score: " + enemyPlayer.getScore(), 0, (int) (3 * Def.G_GAP / 4));
 
         // Draw the Food
         for (GameEntity f : foods) {

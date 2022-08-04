@@ -49,35 +49,35 @@ public class GameEntity {
     }
 
     // Drawing functions
-    public void drawRect(Graphics2D g2){
+    public void drawRect(Graphics2D g2) {
         draw(g2, getRect());
     }
 
-    public void fillRect(Graphics2D g2){
+    public void fillRect(Graphics2D g2) {
         fill(g2, getRect());
     }
 
-    public void drawCircle(Graphics2D g2){
+    public void drawCircle(Graphics2D g2) {
         draw(g2, getCircle());
     }
 
-    public void fillCircle(Graphics2D g2){
+    public void fillCircle(Graphics2D g2) {
         fill(g2, getCircle());
     }
 
     // Private functions
     private Shape getRect() {
         return new Rectangle2D.Double(
-            Def.G_GAP + xPos * Def.G_WIDTH,
-            Def.G_GAP + yPos * Def.G_WIDTH,
-            Def.G_WIDTH, Def.G_WIDTH);
+                Def.G_GAP + xPos * Def.G_WIDTH,
+                Def.G_GAP + yPos * Def.G_WIDTH,
+                Def.G_WIDTH, Def.G_WIDTH);
     }
 
     private Shape getCircle() {
         return new Ellipse2D.Double(
-            Def.G_GAP + xPos * Def.G_WIDTH,
-            Def.G_GAP + yPos * Def.G_WIDTH,
-            Def.G_WIDTH, Def.G_WIDTH);
+                Def.G_GAP + xPos * Def.G_WIDTH,
+                Def.G_GAP + yPos * Def.G_WIDTH,
+                Def.G_WIDTH, Def.G_WIDTH);
     }
 
     private void draw(Graphics2D g2, Shape shape) {

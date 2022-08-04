@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GameController extends JComponent {
     private final long FRAME_DURATION = 1000 / Def.FRAMES_PER_SECOND;
-    private boolean isGameRunning= true;
+    private boolean isGameRunning = true;
     private int winningPlayerID = -1;
     private long gameStartTime;
     private final ClientList clientList;
@@ -39,7 +39,7 @@ public class GameController extends JComponent {
             foodYPos = (int) (Math.random() * Def.MAP_SIZE);
         } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
 
-        foods.add(new GameEntity(foodXPos,foodYPos,Def.F_COLOR));
+        foods.add(new GameEntity(foodXPos, foodYPos, Def.F_COLOR));
 
         // Set Up
         // Add players into a list and send info to game board
@@ -74,39 +74,38 @@ public class GameController extends JComponent {
         Player player = players.get(playerID);
         if (isMovementValid(player, direction)) {
             player.setNextDirection(direction);
-        }
-        else {
+        } else {
             player.setNextDirection(Direction.Stop);
         }
     }
 
-    private boolean isMovementValid (Player player, Direction direction) {
+    private boolean isMovementValid(Player player, Direction direction) {
         final int x = player.getXPos();
         final int y = player.getYPos();
         boolean result = false;
         try {
             if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
-                switch (direction){
+                switch (direction) {
                     case North:
-                        if(y > 0 && map[y - 1][x]){
+                        if (y > 0 && map[y - 1][x]) {
                             map[y - 1][x] = false;
                             result = true;
                         }
                         break;
                     case South:
-                        if(y < Def.MAP_SIZE - 1 && map[y + 1][x]){
+                        if (y < Def.MAP_SIZE - 1 && map[y + 1][x]) {
                             map[y + 1][x] = false;
                             result = true;
                         }
                         break;
                     case East:
-                        if(x < Def.MAP_SIZE - 1 && map[y][x + 1]){
+                        if (x < Def.MAP_SIZE - 1 && map[y][x + 1]) {
                             map[y][x + 1] = false;
                             result = true;
                         }
                         break;
                     case West:
-                        if(x > 0 && map[y][x - 1]){
+                        if (x > 0 && map[y][x - 1]) {
                             map[y][x - 1] = false;
                             result = true;
                         }
@@ -140,7 +139,7 @@ public class GameController extends JComponent {
             final int prevX = p.getXPos();
             final int prevY = p.getYPos();
             try {
-                if (lock.tryLock(500, TimeUnit.MILLISECONDS)) { 
+                if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                     switch (p.getNextDirection()) {
                         case North:
                             p.setYPos(prevY - 1);
@@ -160,7 +159,7 @@ public class GameController extends JComponent {
 
                         case Quit:
                             isGameRunning = false;
-                            winningPlayerID = p.getPlayerID()==0? 1 : 0;
+                            winningPlayerID = p.getPlayerID() == 0 ? 1 : 0;
                     }
                     final int newX = p.getXPos();
                     final int newY = p.getYPos();
@@ -183,7 +182,7 @@ public class GameController extends JComponent {
             final int playerX = p.getXPos();
             final int playerY = p.getYPos();
             for (GameEntity f : foods) {
-                if (playerX == f.getXPos() && playerY== f.getYPos()) {
+                if (playerX == f.getXPos() && playerY == f.getYPos()) {
                     setRandomFoodPosition(f);
                     p.setScore(p.getScore() + 1);
                     break;
@@ -194,10 +193,10 @@ public class GameController extends JComponent {
                 winningPlayerID = p.getPlayerID();
             }
         }
-        
+
         // Setting isClientUpdated back to false to prepare for next update session
         for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
-            clientList.setClientUpdated(i,false);
+            clientList.setClientUpdated(i, false);
         }
     }
 
@@ -205,12 +204,10 @@ public class GameController extends JComponent {
         if (!isGameRunning) {
             if (playerID == winningPlayerID) {
                 return "V";
-            }
-            else {
+            } else {
                 return "L";
             }
-        }
-        else {
+        } else {
             StringBuilder result = new StringBuilder();
             for (Player p : players) {
                 result.append(p.getXPos()).append(",").append(p.getYPos()).append(",").append(p.getScore()).append(",");
@@ -223,7 +220,7 @@ public class GameController extends JComponent {
         }
     }
 
-    private void setRandomFoodPosition (GameEntity food) {
+    private void setRandomFoodPosition(GameEntity food) {
         int foodYPos;
         int foodXPos;
         do {

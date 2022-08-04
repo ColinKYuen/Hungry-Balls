@@ -13,7 +13,7 @@ public class GameServer {
         ExecutorService executorService = Executors.newFixedThreadPool(Def.NUM_OF_PLAYERS);
         while (clientList.getCurrentCount() != Def.NUM_OF_PLAYERS) {
             System.out.println("Waiting for client to connect...");
-            Socket client= listener.accept();
+            Socket client = listener.accept();
             ServerChild childThread = new ServerChild(client, gameController, clientList);
             executorService.execute(childThread);
         }

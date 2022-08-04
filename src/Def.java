@@ -8,6 +8,7 @@ public class Def {
 
     // Game Info
     final static int MAP_SIZE = 8;
+    final static int FRAMES_PER_SECOND = 8;
 
     // For Drawing
     final static double G_WIDTH = Math.ceil((double)WINDOW_SIZE / (MAP_SIZE + 1));

@@ -48,6 +48,11 @@ public class Launcher {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         client.triggerQuit();
+                        try {
+                            Thread.sleep(1000/Def.FRAMES_PER_SECOND);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
                         System.exit(1);
                     }
                 }

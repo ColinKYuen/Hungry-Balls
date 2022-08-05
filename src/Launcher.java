@@ -48,6 +48,7 @@ public class Launcher {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         client.triggerQuit();
+                        System.exit(1);
                     }
                 }
         );

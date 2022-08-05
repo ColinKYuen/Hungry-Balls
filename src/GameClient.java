@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameClient implements KeyListener {
-    private boolean isGameRunning = true;
     private final Socket socket;
     private final BufferedReader in;
     private final PrintWriter out;
     private int playerID;
 
     private final GameBoard gameBoard;
-    private Player controllablePlayer;
     private Direction inputDirection = Direction.Stop;
 
     public GameClient(int serverPort) throws Exception {
@@ -26,23 +24,23 @@ public class GameClient implements KeyListener {
     public GameClient(String serverAddress, int serverPort) throws Exception {
         socket = new Socket(serverAddress, serverPort);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new PrintWriter(socket.getOutputStream(),true);
+        out = new PrintWriter(socket.getOutputStream(), true);
         out.println("00"); // First, send initializing message
         String initResponse = in.readLine();
         String[] gameStateStrings = initResponse.split(",");
         List<Player> players = new ArrayList<>();
         players.add(new Player(Integer.parseInt(gameStateStrings[0]),
                 Integer.parseInt(gameStateStrings[1]),
-                Def.P1_COLOR,0));
+                Def.P1_COLOR, 0));
         players.add(new Player(Integer.parseInt(gameStateStrings[3]),
                 Integer.parseInt(gameStateStrings[4]),
-                Def.P2_COLOR,1));
+                Def.P2_COLOR, 1));
         List<GameEntity> foods = new ArrayList<>();
         foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),
                 Integer.parseInt(gameStateStrings[7]),
                 Def.F_COLOR));
         playerID = Integer.parseInt(gameStateStrings[8]);
-        gameBoard = new GameBoard(players,foods,playerID);
+        gameBoard = new GameBoard(players, foods, playerID);
     }
 
     // Returns the win/lose state
@@ -57,7 +55,7 @@ public class GameClient implements KeyListener {
             String initResponse = in.readLine();
             System.out.println(initResponse);
             // 3. Parse the response
-                // Check if the response is win or lose, if it is, return true or false
+            // Check if the response is win or lose, if it is, return true or false
             String[] gameStateStrings = initResponse.split(",");
             if (gameStateStrings[0].equals("V")) {
                 //when a player win a game
@@ -76,16 +74,16 @@ public class GameClient implements KeyListener {
                 // 4. Update the game board according to the response from Server
                 // Implement and call the updateEntities() function below
                 List<Player> players = new ArrayList<>();
-                Player player1 = new Player(Integer.parseInt(gameStateStrings[0]),Integer.parseInt(gameStateStrings[1]),Def.P1_COLOR,0);
+                Player player1 = new Player(Integer.parseInt(gameStateStrings[0]), Integer.parseInt(gameStateStrings[1]), Def.P1_COLOR, 0);
                 player1.setScore(Integer.parseInt(gameStateStrings[2]));
-                Player player2 = new Player(Integer.parseInt(gameStateStrings[3]),Integer.parseInt(gameStateStrings[4]),Def.P2_COLOR,1);
+                Player player2 = new Player(Integer.parseInt(gameStateStrings[3]), Integer.parseInt(gameStateStrings[4]), Def.P2_COLOR, 1);
                 player2.setScore(Integer.parseInt(gameStateStrings[5]));
                 players.add(player1);
                 players.add(player2);
                 List<GameEntity> foods = new ArrayList<>();
-                foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),Integer.parseInt(gameStateStrings[7]),Def.F_COLOR));
+                foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]), Integer.parseInt(gameStateStrings[7]), Def.F_COLOR));
                 playerID = Integer.parseInt(gameStateStrings[8]);
-                gameBoard.updateEntities(players,foods);
+                gameBoard.updateEntities(players, foods);
             }
         }
     }

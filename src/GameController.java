@@ -102,6 +102,7 @@ public class GameController extends JComponent {
         final int y = player.getYPos();
         boolean result = false;
         try {
+            // TODO: Explain lock.tryLock, lock.unlock, and how they interact with the game board to prevent collisions
             if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                 switch (direction) {
                     case North:
@@ -158,6 +159,7 @@ public class GameController extends JComponent {
             final int prevX = p.getXPos();
             final int prevY = p.getYPos();
             try {
+                // TODO: Explain lock.tryLock, lock.unlock, and how they interact with the game board to prevent collisions
                 if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                     switch (p.getNextDirection()) {
                         case North:
@@ -197,7 +199,7 @@ public class GameController extends JComponent {
             }
         }
 
-        // Check to see if players have eaten a food (if their positions intersect on the board).
+        // Check to see if players have eaten a food (if food and player positions intersect on the board).
         // If so, increment the intersecting player's score and create a new food.
         for (Player p : players) {
             final int playerX = p.getXPos();
@@ -217,7 +219,7 @@ public class GameController extends JComponent {
             }
         }
 
-        // Setting isClientUpdated back to false to prepare for next update session
+        // Setting isClientUpdated back to 'false' to prepare for next update session
         for (int i = 0; i < Def.NUM_OF_PLAYERS; i++) {
             clientList.setClientUpdated(i, false);
         }
@@ -238,7 +240,7 @@ public class GameController extends JComponent {
             // Otherwise, encode the entire game state into a string.
             StringBuilder result = new StringBuilder();
             for (Player p : players) {
-                // Append each players coordinates and score.
+                // Append each player's coordinates and score.
                 result.append(p.getXPos()).append(",").append(p.getYPos()).append(",").append(p.getScore()).append(",");
             }
             for (GameEntity f : foods) {
@@ -251,6 +253,7 @@ public class GameController extends JComponent {
         }
     }
 
+    // Put a piece of Food on a random tile on the board that doesn't overlap with a player.
     private void setRandomFoodPosition(GameEntity food) {
         int foodYPos;
         int foodXPos;

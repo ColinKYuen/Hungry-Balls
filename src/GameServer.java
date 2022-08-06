@@ -26,7 +26,7 @@ public class GameServer {
             System.out.println("Waiting for client to connect...");
 
             // Accept incoming connections from clients using the port of the host.
-            // Once a client has connected, start the game.
+            // Kick off server-side threads for a connecting client to handle game logic for that client.
             Socket client = listener.accept();
             ServerChild childThread = new ServerChild(client, gameController, clientList);
             executorService.execute(childThread);

@@ -4,7 +4,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-// Launcher will start the game on the client
+// Starts the game, either as host or client depending on command line arguments.
+// See the readme for full details!
+
 public class Launcher {
     private static String host;
     private static int port;
@@ -19,6 +21,9 @@ public class Launcher {
         startGame();
     }
 
+    // Sets up the game client. If a host address was passed to the command line when the application was run,
+    // connect a new game client to the running host specified by the host address. Otherwise, instantiate
+    // a new host. The GameClient handles the network Sockets for the application.
     private static void setUpConnection() throws Exception {
         if (host == null) {
             // Create Server
@@ -37,6 +42,7 @@ public class Launcher {
         }
     }
 
+    // Prepare the window for rendering the game.
     private static void setUpFrame() {
         frame = new JFrame();
         frame.setSize(Def.WIDTH, Def.HEIGHT);
@@ -65,6 +71,7 @@ public class Launcher {
         frame.dispose();
     }
 
+    // Parse the collected command line arguments.
     private static void parseArgs(String[] args) throws Exception {
         if (args.length == 1) {
             // Only one argument, start Server
@@ -75,11 +82,13 @@ public class Launcher {
             host = args[0];
             port = validateInput(args[1]);
         } else {
+            // Explain proper input if malformed input is provided.
             System.out.println("Start a Server: java Launcher <port>\nConnect to a Server: java Launcher <host> <port>");
             System.exit(0);
         }
     }
 
+    // Expect a valid port number from the port argument.
     private static int validateInput(String portArg) throws Exception {
         int port = Integer.parseInt(portArg);
         if (port < 0 || port > 65535) {
@@ -88,6 +97,7 @@ public class Launcher {
         return port;
     }
 
+    // Display a 'game over' screen based on whether your won or lost!
     private static void triggerGameEnd(boolean isWinner) {
         final JFrame frame = new JFrame("Results");
         final String result;

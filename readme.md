@@ -49,6 +49,3 @@ The game will run until a player eats **5** pieces of food or one of the players
 
 **Quit the game:** `Q` or `Esc`
 
----
-### Technical Information
-

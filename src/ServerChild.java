@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-// A client which sends and receives messages from the server.
+// A running server-side game instance.
 
 public class ServerChild implements Runnable {
     private final Socket client;
@@ -23,11 +23,14 @@ public class ServerChild implements Runnable {
     @Override
     public void run() {
         try {
+
+            // Set up input and output readers to send and receive messages from a client instance.
             OutputStream os = client.getOutputStream();
             InputStream is = client.getInputStream();
             PrintWriter out = new PrintWriter(os, true);
             BufferedReader in = new BufferedReader(new InputStreamReader(is));
 
+            // Read
             String initMsg = in.readLine(); // We assume that the first message is "00"
             if (initMsg.equals("00")) {
                 String initResponse = gameController.generateGameStateString(playerID);

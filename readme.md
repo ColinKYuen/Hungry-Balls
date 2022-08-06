@@ -28,11 +28,11 @@ Once the app is built, both the **host** and the **client** must run the app.
 
 #### Host
 
-To start a new server and host a game: `java Window <port>`
+To start a new server and host a game: `java Launcher <port>`
 
 #### Client
 
-To join an existing server and play: `java Window <host_addr> <port>`
+To join an existing server and play: `java Launcher <host_addr> <port>`
 
 Once a **client** has connected to a **host**, the game will begin.
 

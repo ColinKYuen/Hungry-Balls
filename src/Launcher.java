@@ -75,7 +75,7 @@ public class Launcher {
             host = args[0];
             port = validateInput(args[1]);
         } else {
-            System.out.println("Start a Server: java Window <port>\nConnect to a Server: java Window <host> <port>");
+            System.out.println("Start a Server: java Launcher <port>\nConnect to a Server: java Launcher <host> <port>");
             System.exit(0);
         }
     }

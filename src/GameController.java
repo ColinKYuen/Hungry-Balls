@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
+/*
+The main logic and communication hub of the app.
 
+Handles initialization, validation, and updating of game state and rules.
+
+ */
 public class GameController extends JComponent {
     private final long FRAME_DURATION = 1000 / Def.FRAMES_PER_SECOND;
     private boolean isGameRunning = true;
@@ -16,12 +21,16 @@ public class GameController extends JComponent {
     private final boolean[][] map = new boolean[Def.MAP_SIZE][Def.MAP_SIZE];
     private final ReentrantLock lock = new ReentrantLock();
 
+    // Initialize the game state.
     public GameController(ClientList clientList) {
         for (int i = 0; i < Def.MAP_SIZE; i++) {
             for (int j = 0; j < Def.MAP_SIZE; j++) {
                 map[i][j] = true;
             }
         }
+
+        // Player locations are false tiles or illegal moves.
+        // Set up the initial player locations as false tiles.
         map[Def.P1_Y_INITIAL_POS][Def.P1_X_INITIAL_POS] = false;
         map[Def.P2_Y_INITIAL_POS][Def.P2_X_INITIAL_POS] = false;
         this.clientList = clientList;
@@ -29,6 +38,7 @@ public class GameController extends JComponent {
         players.add(new Player(Def.P1_X_INITIAL_POS, Def.P1_Y_INITIAL_POS, Def.P1_COLOR, 0));
         players.add(new Player(Def.P2_X_INITIAL_POS, Def.P2_Y_INITIAL_POS, Def.P2_COLOR, 1));
 
+        // Place food randomly, and make sure it isn't under a player to begin with.
         int foodYPos;
         int foodXPos;
         do {
@@ -49,6 +59,9 @@ public class GameController extends JComponent {
         // Etc
     }
 
+    // Run the app.
+    // Threads sleep for the 'FRAME_DURATION' between each game tick, in effect defining a 'tick rate'
+    // or 'frames per second' for the game.
     public void start() {
         gameStartTime = System.currentTimeMillis();
         repaint();
@@ -70,6 +83,7 @@ public class GameController extends JComponent {
         }
     }
 
+    // Change the direction of a player's movement based on a key input, as long as that movement is 'valid'.
     public void setPlayerNextDirection(int playerID, Direction direction) {
         Player player = players.get(playerID);
         if (isMovementValid(player, direction)) {
@@ -79,6 +93,10 @@ public class GameController extends JComponent {
         }
     }
 
+    // See if a desired movement is 'valid'.
+    // A valid movement:
+    // 1) Does not escape the board
+    // 2) Does not collide with another player
     private boolean isMovementValid(Player player, Direction direction) {
         final int x = player.getXPos();
         final int y = player.getYPos();
@@ -134,7 +152,8 @@ public class GameController extends JComponent {
     private void updateGame() {
         while (!clientList.isAllPlayersUpdated()) {} // Block until server receives update from all players
 
-        // Updating player movement
+        // Updating player movement.
+        // setYPos and setXPos perform implicit bounds checking, so it is not needed here.
         for (Player p : players) {
             final int prevX = p.getXPos();
             final int prevY = p.getYPos();
@@ -178,6 +197,8 @@ public class GameController extends JComponent {
             }
         }
 
+        // Check to see if players have eaten a food (if their positions intersect on the board).
+        // If so, increment the intersecting player's score and create a new food.
         for (Player p : players) {
             final int playerX = p.getXPos();
             final int playerY = p.getYPos();
@@ -188,6 +209,8 @@ public class GameController extends JComponent {
                     break;
                 }
             }
+
+            // End the game when a player reaches WINNING_SCORE.
             if (p.getScore() == Def.WINNING_SCORE) {
                 isGameRunning = false;
                 winningPlayerID = p.getPlayerID();
@@ -200,7 +223,10 @@ public class GameController extends JComponent {
         }
     }
 
+    // Translate the game state into a string of chars that can easily be sent from socket to socket and parsed by the client.
     public String generateGameStateString(int playerID) {
+
+        // Return simple Victory or Loss (for the host) chars if the game has ended.
         if (!isGameRunning) {
             if (playerID == winningPlayerID) {
                 return "V";
@@ -208,13 +234,18 @@ public class GameController extends JComponent {
                 return "L";
             }
         } else {
+
+            // Otherwise, encode the entire game state into a string.
             StringBuilder result = new StringBuilder();
             for (Player p : players) {
+                // Append each players coordinates and score.
                 result.append(p.getXPos()).append(",").append(p.getYPos()).append(",").append(p.getScore()).append(",");
             }
             for (GameEntity f : foods) {
+                // Append the coordinates of the food.
                 result.append(f.getXPos()).append(",").append(f.getYPos()).append(",");
             }
+            // Append the current playerID.
             result.append(playerID);
             return result.toString();
         }

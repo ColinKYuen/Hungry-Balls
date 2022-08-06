@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+// A client which sends and receives messages from the server.
+
 public class ServerChild implements Runnable {
     private final Socket client;
     private final int playerID;

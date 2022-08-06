@@ -8,6 +8,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+The 'player' client of the app.
+
+Decodes game state strings from the Server to update the local rendering of the board,
+Collects key presses, then parses and sends them as Directions to the server,
+and gracefully closes the game if a player disconnects or wins.
+
+ */
+
 public class GameClient implements KeyListener {
     private final Socket socket;
     private final BufferedReader in;
@@ -21,25 +30,50 @@ public class GameClient implements KeyListener {
         this("localhost", serverPort);
     }
 
+    // Initialize a new game client, collecting initial game state information from the connection to the server.
     public GameClient(String serverAddress, int serverPort) throws Exception {
+
+        // Create a new socket from the arguments passed by the client player.
         socket = new Socket(serverAddress, serverPort);
+
+        // Set up in and out readers to communicate with the server via the socket.
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
-        out.println("00"); // First, send initializing message
+
+        // First, send initializing message.
+        // Let the server know that the client has successfully connected and is ready to receive game state information.
+        out.println("00");
+
+        // Collect the initial response from the server and use it to initialize the game.
         String initResponse = in.readLine();
+
+        // The game state is provided by the server as a comma separated string of arguments.
+        // Split the string to parse the arguments individually.
         String[] gameStateStrings = initResponse.split(",");
+
         List<Player> players = new ArrayList<>();
+
+        // The first two characters represent the X, Y of player 1, the host.
         players.add(new Player(Integer.parseInt(gameStateStrings[0]),
                 Integer.parseInt(gameStateStrings[1]),
                 Def.P1_COLOR, 0));
+
+        // The third and fourth character represent the X, Y of player 2, the client.
         players.add(new Player(Integer.parseInt(gameStateStrings[3]),
                 Integer.parseInt(gameStateStrings[4]),
                 Def.P2_COLOR, 1));
+
         List<GameEntity> foods = new ArrayList<>();
+
+        // The sixth and seventh character represent the location of the food on the board.
         foods.add(new GameEntity(Integer.parseInt(gameStateStrings[6]),
                 Integer.parseInt(gameStateStrings[7]),
                 Def.F_COLOR));
+
+        // Finally, the eighth character represents the player ID.
         playerID = Integer.parseInt(gameStateStrings[8]);
+
+        // Set up the game board based on what we know about the state from the server.
         gameBoard = new GameBoard(players, foods, playerID);
     }
 

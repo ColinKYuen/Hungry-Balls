@@ -50,7 +50,7 @@ public class Launcher {
                         client.triggerQuit();
                         try {
                             // We sleep for one frame before exiting to let the game update for the other client before closing
-                            Thread.sleep(1000/Def.FRAMES_PER_SECOND);
+                            Thread.sleep(1000 / Def.FRAMES_PER_SECOND);
                         } catch (InterruptedException ex) {
                             ex.printStackTrace();
                         }

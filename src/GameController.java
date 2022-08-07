@@ -99,7 +99,7 @@ public class GameController extends JComponent {
             // Upon attempting to check if movement is valid, attempt to acquire a lock on the board.
             // If it succeeds, i.e. the board is not currently held by another server-side player thread:
             // 1) check for out-of-range coordinates to make sure a move doesn't escape the board
-            // 2) check if a tile is 'TRUE' in the occupancy map; if so, it is occupied by another player.
+            // 2) check if a tile is 'FALSE' in the occupancy map; if so, it is occupied by another player.
             // If the move is within bounds and unoccupied, occupy the cell from the move and return TRUE.
             if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                 switch (direction) {

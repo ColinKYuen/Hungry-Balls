@@ -79,8 +79,6 @@ public class GameClient implements KeyListener {
 
     // Returns the win/lose state
     public boolean start() throws IOException {
-        // TODO: Make a loop of rendering the gameBoard and sending the direction
-        // TODO: Make sure to return true if won and false if lost. We'll know if it won or lost if the string is "W" or "L"
         while (true) {
             // Send currently chosen direction to the server.
             sendMessage();

@@ -50,13 +50,6 @@ public class GameController extends JComponent {
         } while (foodYPos == players.get(0).getYPos() || foodYPos == players.get(1).getYPos());
 
         foods.add(new GameEntity(foodXPos, foodYPos, Def.F_COLOR));
-
-        // Set Up
-        // Add players into a list and send info to game board
-
-        // Server
-        // Client
-        // Etc
     }
 
     // Run the app.
@@ -102,7 +95,12 @@ public class GameController extends JComponent {
         final int y = player.getYPos();
         boolean result = false;
         try {
-            // TODO: Explain lock.tryLock, lock.unlock, and how they interact with the game board to prevent collisions
+            // The game board is a thread-locked object which only one player thread can modify at a time.
+            // Upon attempting to check if movement is valid, attempt to acquire a lock on the board.
+            // If it succeeds, i.e. the board is not currently held by another server-side player thread:
+            // 1) check for out-of-range coordinates to make sure a move doesn't escape the board
+            // 2) check if a tile is 'TRUE' in the occupancy map; if so, it is occupied by another player.
+            // If the move is within bounds and unoccupied, occupy the cell from the move and return TRUE.
             if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                 switch (direction) {
                     case North:
@@ -138,6 +136,7 @@ public class GameController extends JComponent {
             // Couldn't obtain lock, ignore
         } finally {
             try {
+                // After finding a legal move, unlock the board for the other threads to use.
                 lock.unlock();
             } catch (Exception e) {
                 // Didn't have lock, ignore
@@ -159,7 +158,10 @@ public class GameController extends JComponent {
             final int prevX = p.getXPos();
             final int prevY = p.getYPos();
             try {
-                // TODO: Explain lock.tryLock, lock.unlock, and how they interact with the game board to prevent collisions
+                // The game board is a thread-locked object which only one player thread can modify at a time.
+                // Upon attempting to make a move, attempt to acquire a lock on the board.
+                // If it succeeds, i.e. the board is not currently held by another server-side player thread,
+                // Move the player in the requested direction.
                 if (lock.tryLock(500, TimeUnit.MILLISECONDS)) {
                     switch (p.getNextDirection()) {
                         case North:
@@ -192,6 +194,7 @@ public class GameController extends JComponent {
                 // Couldn't obtain lock, ignore
             } finally {
                 try {
+                    // After moving, unlock the board object for other players.
                     lock.unlock();
                 } catch (Exception e) {
                     // Didn't have lock, ignore

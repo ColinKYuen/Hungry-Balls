@@ -1,5 +1,8 @@
 import java.awt.Color;
 
+// A specific implementation of GameEntity for Players. Has an ID, a score, and a direction, on top of other
+// GameEntity fields.
+
 public class Player extends GameEntity {
     private final int playerID;
     private int score = 0;

@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+// Renders the game board with the Players and pieces of Food.
+
 public class GameBoard extends JComponent {
     private final GameEntity[][] board = new GameEntity[Def.MAP_SIZE][Def.MAP_SIZE];
     private final List<GameEntity> foods = new ArrayList<>();

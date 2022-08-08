@@ -4,6 +4,8 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 
+// Represents a generic object on the board, such as a Player or a piece of Food.
+
 public class GameEntity {
     private int xPos;
     private int yPos;
@@ -16,7 +18,8 @@ public class GameEntity {
         this.colour = colour;
     }
 
-    // Setters
+    // Setters which also implicitly perform bounds checking.
+
     public void setXPos(int xPos) {
         // Bound checking, don't unwrap.
         if (xPos < Def.MAP_SIZE && xPos >= 0) {

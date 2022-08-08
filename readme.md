@@ -21,6 +21,8 @@ Hungryballs is a multiplayer food-eating game designed for two players (the **ho
 
 Players navigate an 8x8 grid, touching food to eat it. The first player to eat **5** pieces of food wins the game!
 
+A demo video of the game running can be found [here](https://1sfu-my.sharepoint.com/:v:/g/personal/parerass_sfu_ca/EYmGbEY-B4dPt2Lw0grZ3usB3-50WSCuYTHQmjkTh7mkcw?e=PKQlDF).
+
 ---
 ### Running the App
 
